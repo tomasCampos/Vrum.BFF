@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vrum.BFF", "Vrum.BFF\Vrum.BFF.csproj", "{8B5934E0-5625-44E1-B752-FFE03E8F1C31}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B5934E0-5625-44E1-B752-FFE03E8F1C31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B5934E0-5625-44E1-B752-FFE03E8F1C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B5934E0-5625-44E1-B752-FFE03E8F1C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B5934E0-5625-44E1-B752-FFE03E8F1C31}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7E68D037-0206-4251-BC2F-259A8246E424}
+	EndGlobalSection
+EndGlobal
