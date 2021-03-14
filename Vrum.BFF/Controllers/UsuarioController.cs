@@ -86,5 +86,43 @@ namespace Vrum.BFF.Controllers
                 Corpo = new { CodigoUsuarioCadastrado = resultado.CodigoUsuarioCadastrado }
             });
         }
+
+        [HttpPost("autenticacao")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AutenticarUsuario([FromBody] AutenticarUsuarioRequestModel requisicao)
+        {
+            var validacao = requisicao.Validar();
+            if (!validacao.Valido)
+            {
+                return BadRequest(new HttpResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Sucesso = false,
+                    Mensagem = validacao.MensagemDeErro
+                });
+            }
+
+            var resultadoAutenticacao = await _usuarioServico.AutenticarUsuario(requisicao.EmailUsuario, requisicao.SenhaUsuario);
+
+            if (!resultadoAutenticacao.Sucesso)
+            {
+                return Unauthorized(new HttpResponseModel 
+                {
+                    Sucesso = false,
+                    StatusCode = System.Net.HttpStatusCode.Unauthorized,
+                    Mensagem = resultadoAutenticacao.Mensagem,
+                    Corpo = null
+                });
+            }
+
+            return Ok(new HttpResponseModel
+            {
+                Sucesso = true,
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Mensagem = resultadoAutenticacao.Mensagem,
+                Corpo = resultadoAutenticacao.UsuarioLogado
+            });
+        }
     }
 }
