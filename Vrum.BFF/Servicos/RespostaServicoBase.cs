@@ -14,9 +14,9 @@ namespace Vrum.BFF.Servicos
             Sucesso = true;
         }
 
-        protected RespostaServicoBase(string mensagemfalha)
+        protected RespostaServicoBase(string mensagemErro)
         {
-            Mensagem = mensagemfalha;
+            Mensagem = mensagemErro;
             Sucesso = false;
         }
 

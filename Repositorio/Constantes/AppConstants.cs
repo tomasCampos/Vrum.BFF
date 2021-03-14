@@ -4,6 +4,8 @@
     {
         public const string CONNECTION_STRING = "server=us-cdbr-east-03.cleardb.com;user=bf9c7fe9712622;password=e459392c;database=heroku_3dc1bcc8f5cdd12;SSL Mode=None";
 
+        public const string CHAVE_CIFRA = "1e64fdce-e561-4f3d-bb78-0d7c8c86d14b";
+
         public const string SQL_OBTER_USUARIO_POR_EMAIL = @"SELECT 
 	                                                        id_usuario AS Codigo,
                                                             email_usuario AS Email,

@@ -5,6 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Vrum.BFF.Servicos.Usuario.Models;
 using Vrum.BFF.Entidades;
+using Repositorio.Dtos;
+using Vrum.BFF.Util;
+using static Repositorio.Constantes.AppConstants;
+using static Vrum.BFF.Entidades.UsuarioEntidade;
 
 namespace Vrum.BFF.Servicos.Usuario
 {
@@ -17,9 +21,28 @@ namespace Vrum.BFF.Servicos.Usuario
             _usuarioRepositorio = usuarioRepositorio;
         }
 
-        public Task<CadastrarUsuarioServicoRespostaModel> CadastrarUsuario(UsuarioEntidade usuario)
+        public async Task<CadastrarUsuarioServicoRespostaModel> CadastrarUsuario(UsuarioEntidade usuario)
         {
-            throw new NotImplementedException();
+            var respostaObterUsuario = await ObterUsuario(usuario.Email);
+
+            if (respostaObterUsuario.Sucesso)
+                return new CadastrarUsuarioServicoRespostaModel("Nome de usuário já utilizado.");
+
+            var senhaCifrada = CifrarSenhaUsuario(usuario.Senha);
+            var usuarioDto = new UsuarioDto 
+            {
+                Cpf = usuario.Cpf,
+                Email = usuario.Email,
+                Nome = usuario.Nome,
+                NumeroTelefone = usuario.NumeroTelefone,
+                Perfil = usuario.ObterCodigoPerfil(),
+                Senha = senhaCifrada
+            };
+            
+            await _usuarioRepositorio.CadastrarUsuario(usuarioDto);
+
+            respostaObterUsuario = await ObterUsuario(usuario.Email);
+            return new CadastrarUsuarioServicoRespostaModel(respostaObterUsuario.Usuario.Codigo);       
         }
 
         public async Task<ObterUsuarioServicoRespostaModel> ObterUsuario(string emailUsuario)
@@ -32,6 +55,12 @@ namespace Vrum.BFF.Servicos.Usuario
             var usuario = new UsuarioEntidade(usuarioDto);
             var resposta = new ObterUsuarioServicoRespostaModel(usuario);
             return resposta;
+        }
+
+        private string CifrarSenhaUsuario(string senha)
+        {
+            var senhaCifrada = AES.Encrypt(senha, CHAVE_CIFRA);
+            return senhaCifrada;
         }
     }
 

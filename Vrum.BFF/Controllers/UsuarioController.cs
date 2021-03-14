@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Vrum.BFF.Controllers.Models;
+using Vrum.BFF.Controllers.Models.Usuario;
 using Vrum.BFF.Servicos.Usuario;
 
 namespace Vrum.BFF.Controllers
@@ -21,22 +22,10 @@ namespace Vrum.BFF.Controllers
         }
 
         [HttpGet("{emailUsuario}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ObterUsuario([FromRoute] string emailUsuario)
         {
-            if (!emailUsuario.Contains('@'))
-            {
-                return BadRequest(new HttpResponseModel
-                {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest,
-                    Sucesso= false,
-                    Mensagem = "Email inválido",
-                    Corpo = null
-                });
-            }
-
             var respostaServico = await _usuarioServico.ObterUsuario(emailUsuario);
 
             if (!respostaServico.Sucesso)
@@ -56,6 +45,45 @@ namespace Vrum.BFF.Controllers
                 Sucesso = true,
                 Mensagem = respostaServico.Mensagem,
                 Corpo = respostaServico.Usuario
+            });
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> CadastrarUsuario([FromBody] CadastrarUsuarioRequestModel requisicao)
+        {
+            var validacao = requisicao.Validar();
+            if (!validacao.Valido)
+            {
+                return BadRequest(new HttpResponseModel
+                {
+                    StatusCode= System.Net.HttpStatusCode.BadRequest,
+                    Sucesso = false,
+                    Mensagem = validacao.MensagemDeErro
+                });
+            }
+
+            var usuario = requisicao.CriarEntidade();
+            var resultado = await _usuarioServico.CadastrarUsuario(usuario);
+
+            if (!resultado.Sucesso)
+            {
+                return Conflict(new HttpResponseModel
+                {
+                    Sucesso = false,
+                    StatusCode = System.Net.HttpStatusCode.Conflict,
+                    Mensagem = resultado.Mensagem,
+                    Corpo = null
+                });
+            }
+
+            return Created("/Usuarios", new HttpResponseModel
+            {
+                Sucesso = true,
+                StatusCode = System.Net.HttpStatusCode.Created,
+                Mensagem = resultado.Mensagem,
+                Corpo = new { CodigoUsuarioCadastrado = resultado.CodigoUsuarioCadastrado }
             });
         }
     }

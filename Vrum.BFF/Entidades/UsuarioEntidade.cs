@@ -32,7 +32,9 @@ namespace Vrum.BFF.Entidades
         {
             var a = (PerfilUsuario)this.CodigoPerfil;
             return a.ToString();
-        }}
+        }
+            set {}
+        }
 
         private int CodigoPerfil { get; set; }
 
@@ -40,6 +42,11 @@ namespace Vrum.BFF.Entidades
         {
             LOCADOR,
             LOCATARIO
+        }
+
+        public int ObterCodigoPerfil()
+        {
+            return (int)Enum.Parse<PerfilUsuario>(Perfil);
         }
     }
 }

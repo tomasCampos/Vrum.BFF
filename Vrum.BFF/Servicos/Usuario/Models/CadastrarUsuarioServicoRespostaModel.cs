@@ -7,9 +7,9 @@ namespace Vrum.BFF.Servicos.Usuario.Models
 {
     public class CadastrarUsuarioServicoRespostaModel : RespostaServicoBase
     {
-        public CadastrarUsuarioServicoRespostaModel(int codigoUsuarioCadastrado) : base() 
+        public CadastrarUsuarioServicoRespostaModel(int codigoUsuarioCadastrado) : base()
         {
-            CodigoUsuarioCadastrado = codigoUsuarioCadastrado;            
+            CodigoUsuarioCadastrado = codigoUsuarioCadastrado;
         }
 
         public CadastrarUsuarioServicoRespostaModel(string mensagemErro) : base(mensagemErro) {}
