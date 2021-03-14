@@ -1,4 +1,6 @@
-﻿namespace Repositorio.Dtos
+﻿using System;
+
+namespace Repositorio.Dtos
 {
     public class UsuarioDto
     {
@@ -9,6 +11,9 @@
         public string Cpf { get; set; }
         public string NumeroTelefone { get; set; }
         public int Perfil { get; set; }
+        DateTime DataUltimaAlteracaoAlteracao { get; set; }
+        DateTime DataCriacaoRegistro { get; set; }
+
     }
 }
 

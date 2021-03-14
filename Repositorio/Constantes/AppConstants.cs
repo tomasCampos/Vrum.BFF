@@ -11,7 +11,9 @@
                                                             nome_usuario AS Nome,
                                                             cpf_usuario AS Cpf,
                                                             telefone_usuario AS NumeroTelefone,
-                                                            perfil_usuario AS Perfil
+                                                            perfil_usuario AS Perfil,
+                                                            data_alteracao AS DataUltimaAlteracaoAlteracao,
+                                                            data_criacao AS DataCriacaoRegistro
                                                         FROM usuario
                                                         WHERE email_usuario = @email_usuario";
 
