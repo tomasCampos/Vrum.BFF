@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
+using Repositorio.Repositorios;
 
 namespace Vrum.BFF
 {
@@ -26,6 +27,8 @@ namespace Vrum.BFF
         {
             services.AddControllers();
             services.AddTransient(_ => new MySqlConnection(Configuration["ConnectionStrings:Default"]));
+
+            services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
             services.AddCors(options =>
             {
