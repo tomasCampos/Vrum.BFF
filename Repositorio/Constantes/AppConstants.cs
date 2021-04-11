@@ -25,13 +25,34 @@
                                                     `nome_usuario`,
                                                     `cpf_usuario`,
                                                     `telefone_usuario`,
-                                                    `perfil_usuario`)
+                                                    `perfil_usuario`,
+                                                     `id_endereco`)
                                                     VALUES
                                                     (@email_usuario,
                                                     @senha_usuario,
                                                     @nome_usuario,
                                                     @cpf_usuario,
                                                     @telefone_usuario,
-                                                    @perfil_usuario);";
+                                                    @perfil_usuario,
+                                                    @id_endereco);";
+
+        public const string SQL_CADASTRAR_ENDERECO = @"INSERT INTO `heroku_3dc1bcc8f5cdd12`.`endereco`
+                                                    (`chave_endereco`,
+                                                    `cep_endereco`,
+                                                    `logradouro_endereco`,
+                                                    `numero_endereco`,
+                                                    `complemento_endereco`,
+                                                    `bairro_endereco`,
+                                                    `uf_endereco`)
+                                                    VALUES
+                                                    (@chave_endereco,
+                                                    @cep_endereco,
+                                                    @logradouro_endereco,
+                                                    @numero_endereco,
+                                                    @complemento_endereco,
+                                                    @bairro_endereco,
+                                                    @uf_endereco);";
+
+        public const string SQL_OBTER_CODIGO_ENDERECO_POR_CHAVE = "SELECT id_endereco FROM `heroku_3dc1bcc8f5cdd12`.`endereco` WHERE chave_endereco = @chave_endereco";
     }
 }

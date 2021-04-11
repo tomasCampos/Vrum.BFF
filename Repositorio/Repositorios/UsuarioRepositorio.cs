@@ -17,14 +17,40 @@ namespace Repositorio.Repositorios
 
         public async Task CadastrarUsuario(UsuarioDto usuario)
         {
-            await _dataBase.ExecutarAsync(AppConstants.SQL_CADASTRAR_USUARIO, new { email_usuario = usuario.Email, senha_usuario = usuario.Senha, nome_usuario = usuario.Nome, cpf_usuario = usuario.Cpf, 
-                telefone_usuario = usuario.NumeroTelefone, perfil_usuario = usuario.Perfil});
+            await CadastrarEnderecoDoUsuario(usuario.ChaveIdentificacaoEndereco, usuario.CepEndereco, usuario.BairroEndereco, usuario.ComplementoEndereco,
+                usuario.LogradouroEndereco, usuario.NumeroEndereco, usuario.UfEndereco);
+
+            var codigoEndereco = await ObterCodigoDoEndereco(usuario.ChaveIdentificacaoEndereco);
+
+            await _dataBase.ExecutarAsync(AppConstants.SQL_CADASTRAR_USUARIO, new { email_usuario = usuario.Email, senha_usuario = usuario.Senha, 
+                nome_usuario = usuario.Nome, cpf_usuario = usuario.Cpf, telefone_usuario = usuario.NumeroTelefone, perfil_usuario = usuario.Perfil,
+                id_endereco = codigoEndereco});
         }
 
         public async Task<UsuarioDto> ObterUsuario(string emailUsuario)
         {
             var result = await _dataBase.SelecionarAsync<UsuarioDto>(AppConstants.SQL_OBTER_USUARIO_POR_EMAIL, new { email_usuario = emailUsuario });
             return result.FirstOrDefault();
+        }
+
+        private async Task CadastrarEnderecoDoUsuario(string chave, string cep, string bairro, string complemento, string logradouro, string numero, string uf)
+        {
+            await _dataBase.ExecutarAsync(AppConstants.SQL_CADASTRAR_ENDERECO, new 
+            { 
+                chave_endereco = chave,
+                cep_endereco = cep,
+                logradouro_endereco = logradouro,
+                numero_endereco = numero,
+                complemento_endereco = complemento,
+                bairro_endereco = bairro,
+                uf_endereco = uf
+            });
+        }
+
+        private async Task<int> ObterCodigoDoEndereco(string chaveIdentificacao)
+        {
+            var codigoEndereco = await _dataBase.SelecionarAsync<int>(AppConstants.SQL_OBTER_CODIGO_ENDERECO_POR_CHAVE, new { chave_endereco = chaveIdentificacao });
+            return codigoEndereco.First();
         }
     }
 

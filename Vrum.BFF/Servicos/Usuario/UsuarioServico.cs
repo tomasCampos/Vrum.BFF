@@ -1,14 +1,11 @@
 ﻿using Repositorio.Repositorios;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Vrum.BFF.Servicos.Usuario.Models;
 using Vrum.BFF.Entidades;
 using Repositorio.Dtos;
 using Vrum.BFF.Util;
 using static Repositorio.Constantes.AppConstants;
-using static Vrum.BFF.Entidades.UsuarioEntidade;
+using System;
 
 namespace Vrum.BFF.Servicos.Usuario
 {
@@ -45,17 +42,25 @@ namespace Vrum.BFF.Servicos.Usuario
             if (respostaObterUsuario.Sucesso)
                 return new CadastrarUsuarioServicoRespostaModel("Nome de usuário já utilizado.");
 
+            var chaveIdentificacaoEndereco = Guid.NewGuid().ToString();
             var senhaCifrada = CifrarSenhaUsuario(usuario.Senha);
-            var usuarioDto = new UsuarioDto 
+            var usuarioDto = new UsuarioDto
             {
                 Cpf = usuario.Cpf,
                 Email = usuario.Email,
                 Nome = usuario.Nome,
                 NumeroTelefone = usuario.NumeroTelefone,
                 Perfil = usuario.ObterCodigoPerfil(),
-                Senha = senhaCifrada
+                Senha = senhaCifrada,
+                ChaveIdentificacaoEndereco = chaveIdentificacaoEndereco,
+                CepEndereco = usuario.Endereco?.Cep,
+                BairroEndereco = usuario.Endereco?.Bairro,
+                ComplementoEndereco = usuario.Endereco?.Complemento,
+                LogradouroEndereco = usuario.Endereco?.Logradouro,
+                NumeroEndereco = usuario.Endereco?.Numero,
+                UfEndereco = usuario.Endereco?.Uf                
             };
-            
+
             await _usuarioRepositorio.CadastrarUsuario(usuarioDto);
 
             respostaObterUsuario = await ObterUsuario(usuario.Email);

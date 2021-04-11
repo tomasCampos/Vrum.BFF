@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Vrum.BFF.Entidades;
 
 namespace Vrum.BFF.Controllers.Models.Usuario
@@ -14,6 +12,7 @@ namespace Vrum.BFF.Controllers.Models.Usuario
         public string PerfilUsuario { get; set; }
         public string CpfUsuario { get; set; }
         public string NumeroTelefoneUsuario { get; set; }
+        public CadastrarEnderecoRequestModel EnderecoUsuario { get; set; }
 
         public ValidacaoRequisicaoModel Validar()
         {
@@ -30,20 +29,57 @@ namespace Vrum.BFF.Controllers.Models.Usuario
             if(!string.Equals(PerfilUsuario, "LOCATARIO") && !string.Equals(PerfilUsuario, "LOCADOR"))
                 erros.Add("O campo perfil do usuario deve ser exadamente um dos: 'LOCADOR' ou 'LOCATARIO'");
 
+            if (EnderecoUsuario != null)
+            {
+                if (string.IsNullOrWhiteSpace(EnderecoUsuario.Cep))
+                    erros.Add("O campo CEP do endereço do usuário deve ser preenchido");
+                if (string.IsNullOrWhiteSpace(EnderecoUsuario.Logradouro))
+                    erros.Add("O campo logradouro do endereço do usuário deve ser preenchido");
+                if (string.IsNullOrWhiteSpace(EnderecoUsuario.Numero))
+                    erros.Add("O campo número do endereço do usuário deve ser preenchido");
+                if (string.IsNullOrWhiteSpace(EnderecoUsuario.Uf))
+                    erros.Add("O campo UF do endereço do usuário deve ser preenchido");
+            }
+
             return new ValidacaoRequisicaoModel { Erros = erros, Valido = !erros.Any() };
         }
 
         public UsuarioEntidade CriarEntidade()
         {
-            return new UsuarioEntidade
+            var Entidade =  new UsuarioEntidade
             {
                 Email = EmailUsuario,
                 Senha = SenhaUsuario,
                 Nome = NomeUsuario,
                 Cpf = CpfUsuario,
                 NumeroTelefone = NumeroTelefoneUsuario,
-                Perfil = PerfilUsuario
+                Perfil = PerfilUsuario             
             };
+
+            if (EnderecoUsuario != null)
+            {
+                Entidade.Endereco = new EnderecoEntidade
+                {
+                    Bairro = EnderecoUsuario.Bairro,
+                    Cep = EnderecoUsuario.Cep,
+                    Complemento = EnderecoUsuario.Complemento,
+                    Logradouro = EnderecoUsuario.Logradouro,
+                    Numero = EnderecoUsuario.Numero,
+                    Uf = EnderecoUsuario.Uf
+                };
+            }
+
+            return Entidade;
         }
+    }
+
+    public class CadastrarEnderecoRequestModel
+    {
+        public string Cep { get; set; }
+        public string Logradouro { get; set; }
+        public string Numero { get; set; }
+        public string Complemento { get; set; }
+        public string Bairro { get; set; }
+        public string Uf { get; set; }
     }
 }

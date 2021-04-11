@@ -19,6 +19,21 @@ namespace Vrum.BFF.Entidades
             Cpf = usuarioDto.Cpf;
             NumeroTelefone = usuarioDto.NumeroTelefone;
             CodigoPerfil = usuarioDto.Perfil;
+
+            if (usuarioDto.CodigoEndereco.HasValue)
+            {
+                Endereco = new EnderecoEntidade
+                {
+                    Codigo = usuarioDto.CodigoEndereco.Value,
+                    ChaveIdentificacao = usuarioDto.ChaveIdentificacaoEndereco,
+                    Bairro = usuarioDto.BairroEndereco,
+                    Cep = usuarioDto.CepEndereco,
+                    Complemento = usuarioDto.ComplementoEndereco,
+                    Logradouro = usuarioDto.LogradouroEndereco,
+                    Numero = usuarioDto.NumeroEndereco,
+                    Uf = usuarioDto.UfEndereco
+                };
+            }            
         }
 
         public int Codigo { get; set; }
@@ -27,6 +42,7 @@ namespace Vrum.BFF.Entidades
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public string NumeroTelefone { get; set; }
+        public EnderecoEntidade Endereco { get; set; }
         public string Perfil { 
         get 
         {
