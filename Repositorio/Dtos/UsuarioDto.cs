@@ -18,9 +18,7 @@ namespace Repositorio.Dtos
         public string NumeroEndereco { get; set; }
         public string ComplementoEndereco { get; set; }
         public string BairroEndereco { get; set; }
-        public string UfEndereco { get; set; }
-        public DateTime DataUltimaAlteracaoAlteracao { get; set; }
-        public DateTime DataCriacaoRegistro { get; set; }        
+        public string UfEndereco { get; set; }    
     }
 }
 

@@ -7,16 +7,23 @@
         public const string CHAVE_CIFRA = "1e64fdce-e561-4f3d-bb78-0d7c8c86d14b";
 
         public const string SQL_OBTER_USUARIO_POR_EMAIL = @"SELECT 
-	                                                        id_usuario AS Codigo,
-                                                            email_usuario AS Email,
-                                                            senha_usuario AS Senha,
-                                                            nome_usuario AS Nome,
-                                                            cpf_usuario AS Cpf,
-                                                            telefone_usuario AS NumeroTelefone,
-                                                            perfil_usuario AS Perfil,
-                                                            data_alteracao AS DataUltimaAlteracaoAlteracao,
-                                                            data_criacao AS DataCriacaoRegistro
-                                                        FROM usuario
+	                                                        u.id_usuario AS Codigo,
+                                                            u.email_usuario AS Email,
+                                                            u.senha_usuario AS Senha,
+                                                            u.nome_usuario AS Nome,
+                                                            u.cpf_usuario AS Cpf,
+                                                            u.telefone_usuario AS NumeroTelefone,
+                                                            u.perfil_usuario AS Perfil,
+                                                            e.id_endereco AS CodigoEndereco,
+                                                            e.chave_endereco AS ChaveIdentificacaoEndereco,
+                                                            e.cep_endereco AS CepEndereco,
+                                                            e.logradouro_endereco AS LogradouroEndereco,
+                                                            e.numero_endereco AS NumeroEndereco,
+                                                            e.complemento_endereco AS ComplementoEndereco,
+                                                            e.bairro_endereco AS BairroEndereco,
+                                                            e.uf_endereco AS UfEndereco
+                                                        FROM usuario u
+                                                        INNER JOIN endereco e ON u.id_endereco = e.id_endereco
                                                         WHERE email_usuario = @email_usuario";
 
         public const string SQL_CADASTRAR_USUARIO = @"INSERT INTO `heroku_3dc1bcc8f5cdd12`.`usuario`
