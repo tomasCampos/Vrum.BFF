@@ -103,7 +103,7 @@ namespace Vrum.BFF.Controllers
                 });
             }
 
-            var resultadoAutenticacao = await _usuarioServico.AutenticarUsuario(requisicao.EmailUsuario, requisicao.SenhaUsuario);
+            var resultadoAutenticacao = await _usuarioServico.AutenticarUsuario(requisicao.EmailUsuario, requisicao.SenhaUsuario, requisicao.PerfilUsuario);
 
             if (!resultadoAutenticacao.Sucesso)
             {

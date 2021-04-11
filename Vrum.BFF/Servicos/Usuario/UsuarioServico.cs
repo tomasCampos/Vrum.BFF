@@ -18,12 +18,14 @@ namespace Vrum.BFF.Servicos.Usuario
             _usuarioRepositorio = usuarioRepositorio;
         }
 
-        public async Task<AutenticarUsuarioRespostaModel> AutenticarUsuario(string emailLogin, string senhaLogin)
+        public async Task<AutenticarUsuarioRespostaModel> AutenticarUsuario(string emailLogin, string senhaLogin, string perfilLogin)
         {
             var respostaObterUsuario = await ObterUsuario(emailLogin);
 
             if (!respostaObterUsuario.Sucesso)
                 return new AutenticarUsuarioRespostaModel("Não existe usuário cadastrado para este E-mail.");
+            if (!string.Equals(respostaObterUsuario.Usuario.Perfil, perfilLogin))
+                return new AutenticarUsuarioRespostaModel("Falha ao logar com o perfil especificado");
 
             var usuario = respostaObterUsuario.Usuario;
             var senhaCadastrada = usuario.Senha;
@@ -90,6 +92,6 @@ namespace Vrum.BFF.Servicos.Usuario
     {
         Task<CadastrarUsuarioServicoRespostaModel> CadastrarUsuario(UsuarioEntidade usuario);
         Task<ObterUsuarioServicoRespostaModel> ObterUsuario(string emailUsuario);
-        Task<AutenticarUsuarioRespostaModel> AutenticarUsuario(string emailUsuario, string senha);
+        Task<AutenticarUsuarioRespostaModel> AutenticarUsuario(string emailUsuario, string senha, string perfilLogin);
     }
 }
