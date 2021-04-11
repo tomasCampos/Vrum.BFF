@@ -44,18 +44,15 @@ namespace Vrum.BFF
                 });
             });
 
-            if (!Environment.IsProduction())
+            services.AddSwaggerGen(c =>
             {
-                services.AddSwaggerGen(c =>
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo
-                    {
-                        Title = "Vrum API",
-                        Description = "API",
-                        Version = "v1"
-                    });
+                    Title = "Vrum API",
+                    Description = "API",
+                    Version = "v1"
                 });
-            }
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,16 +63,13 @@ namespace Vrum.BFF
                 app.UseDeveloperExceptionPage();
             }
 
-            if (!env.IsProduction())
-            {
-                app.UseSwagger();
+            app.UseSwagger();
 
-                app.UseSwaggerUI(swagger =>
-                {
-                    swagger.SwaggerEndpoint("/swagger/v1/swagger.json", "Vrum API V1");
-                    swagger.RoutePrefix = string.Empty;
-                });
-            }
+            app.UseSwaggerUI(swagger =>
+            {
+                swagger.SwaggerEndpoint("/swagger/v1/swagger.json", "Vrum API V1");
+                swagger.RoutePrefix = string.Empty;
+            });
 
             app.UseHttpsRedirection();
 
