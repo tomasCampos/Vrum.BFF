@@ -8,7 +8,16 @@ namespace Vrum.BFF.Entidades
 {
     public class UsuarioEntidade
     {
-        public UsuarioEntidade() {}
+        public UsuarioEntidade(string email, string senha, string nome, string cpf, string numeroTelefone, int codigoPerfil, int? codigo = null) 
+        {
+            Codigo = codigo.HasValue ? codigo.Value : 0;
+            Email = email;
+            Senha = senha;
+            Nome = nome;
+            Cpf = cpf;
+            NumeroTelefone = numeroTelefone;
+            CodigoPerfil = codigoPerfil;
+        }
 
         public UsuarioEntidade(UsuarioDto usuarioDto)
         {
@@ -49,7 +58,7 @@ namespace Vrum.BFF.Entidades
             var a = (PerfilUsuario)this.CodigoPerfil;
             return a.ToString();
         }
-            set {}
+            private set {}
         }
 
         private int CodigoPerfil { get; set; }

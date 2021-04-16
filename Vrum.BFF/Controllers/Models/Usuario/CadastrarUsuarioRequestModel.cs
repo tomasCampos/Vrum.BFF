@@ -46,15 +46,8 @@ namespace Vrum.BFF.Controllers.Models.Usuario
 
         public UsuarioEntidade CriarEntidade()
         {
-            var Entidade =  new UsuarioEntidade
-            {
-                Email = EmailUsuario,
-                Senha = SenhaUsuario,
-                Nome = NomeUsuario,
-                Cpf = CpfUsuario,
-                NumeroTelefone = NumeroTelefoneUsuario,
-                Perfil = PerfilUsuario             
-            };
+            var codigoPerfil = string.Equals("LOCADOR", PerfilUsuario) ? 0 : 1;
+            var Entidade =  new UsuarioEntidade(EmailUsuario, SenhaUsuario, NomeUsuario, CpfUsuario, NumeroTelefoneUsuario, codigoPerfil);
 
             if (EnderecoUsuario != null)
             {
