@@ -82,21 +82,60 @@ namespace Vrum.BFF.Controllers
             });
         }
 
+        [HttpGet("{codigo}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ObterCarro(int codigo)
+        {
+            var resultadoServico = await _carroServico.ObterCarro(codigo);
+
+            if (!resultadoServico.Sucesso)
+            {
+                return NotFound(new HttpResponseModel
+                {
+                    Sucesso = false,
+                    StatusCode = System.Net.HttpStatusCode.NotFound,
+                    Mensagem = resultadoServico.Mensagem
+                });
+            }
+
+            return Ok(new HttpResponseModel
+            {
+                Sucesso = true,
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Corpo = resultadoServico.Carro
+            });
+        }
+
         [HttpPatch("{codigoCarro}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AtualizarCarro([FromRoute] int codigoCarro, [FromBody] AlterarCarroRequestModel requisicao)
         {
             var resultadoAtualizacao = await _carroServico.Atualizarcarro(codigoCarro, requisicao);
 
             if (!resultadoAtualizacao.Sucesso)
             {
-                return NotFound(new HttpResponseModel
+                return BadRequest(new HttpResponseModel
                 {
-                    StatusCode = System.Net.HttpStatusCode.NotFound,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
                     Sucesso = false,
                     Mensagem = resultadoAtualizacao.Mensagem
                 });
             }
+
+            return Ok(new HttpResponseModel 
+            {
+                Sucesso = true,
+                StatusCode = System.Net.HttpStatusCode.OK
+            });
+        }
+
+        [HttpDelete("{codigoCarro}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeletarCarro([FromRoute] int codigoCarro)
+        {
+            await _carroServico.DeletarCarro(codigoCarro);
 
             return Ok(new HttpResponseModel 
             {

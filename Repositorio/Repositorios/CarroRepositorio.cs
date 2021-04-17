@@ -52,6 +52,11 @@ namespace Repositorio.Repositorios
             });
         }
 
+        public async Task DeletarCarro(int codigoCarro)
+        {
+            await _dataBase.ExecutarAsync(AppConstants.SQL_DELETAR_CARRO, new { id_carro = codigoCarro });
+        }
+
         public async Task<List<CarroDto>> ListarCarros(string modelo, int? ano, string marca, string placa, int? codigo, string cidade, string estado, int? codigoUsuarioDonoDoCarro)
         {
             var filtro = string.Empty;
@@ -87,5 +92,7 @@ namespace Repositorio.Repositorios
         Task<List<CarroDto>> ListarCarros(string modelo, int? ano, string marca, string placa, int? codigo, string cidade, string estado, int? codigoUsuarioDonoDoCarro);
 
         Task AtualizarCarro(CarroDto carro);
+
+        Task DeletarCarro(int codigoCarro);
     }
 }

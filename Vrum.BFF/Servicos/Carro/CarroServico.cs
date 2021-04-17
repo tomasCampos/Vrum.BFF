@@ -89,6 +89,11 @@ namespace Vrum.BFF.Servicos.Carro
             return new CadastrarCarroServicoRespostaModel(respostaObterCarro.Carro.Codigo);
         }
 
+        public async Task DeletarCarro(int codigoCarro)
+        {
+            await _carroRepositorio.DeletarCarro(codigoCarro);
+        }
+
         public async Task<List<CarroEntidade>> ListarCarros(string modelo, int? ano, string marca, string cidade, string estado, int? codigoUsuarioDonoDoCarro)
         {
             var carrosDto = await _carroRepositorio.ListarCarros(modelo, ano, marca, null, null, cidade, estado, codigoUsuarioDonoDoCarro);
@@ -140,5 +145,7 @@ namespace Vrum.BFF.Servicos.Carro
         Task<ObterCarroServicoRespostaModel> ObterCarro(string placa);
 
         Task<AtualizarCarroServicoRespostaModel> Atualizarcarro(int codigoCarro, AlterarCarroRequestModel novosDadosDoCarro);
+
+        Task DeletarCarro(int codigoCarro);
     }
 }
