@@ -33,6 +33,8 @@ namespace Repositorio.Repositorios
             return result.FirstOrDefault();
         }
 
+        #region METODOS PRIVADOS
+
         private async Task CadastrarEnderecoDoUsuario(string chave, string cep, string bairro, string complemento, string logradouro, string numero, string uf)
         {
             await _dataBase.ExecutarAsync(AppConstants.SQL_CADASTRAR_ENDERECO, new 
@@ -52,6 +54,8 @@ namespace Repositorio.Repositorios
             var codigoEndereco = await _dataBase.SelecionarAsync<int>(AppConstants.SQL_OBTER_CODIGO_ENDERECO_POR_CHAVE, new { chave_endereco = chaveIdentificacao });
             return codigoEndereco.First();
         }
+
+        #endregion
     }
 
     public interface IUsuarioRepositorio

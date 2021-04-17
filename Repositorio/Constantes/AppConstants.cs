@@ -77,8 +77,7 @@
         #region CARRO_SQL
 
         public const string SQL_CADASTRAR_CARRO =   @"INSERT INTO `heroku_3dc1bcc8f5cdd12`.`carro`
-                                                    (`id_carro`,
-                                                    `placa_carro`,
+                                                    (`placa_carro`,
                                                     `modelo_carro`,
                                                     `marca_carro`,
                                                     `cor_carro`,
@@ -86,9 +85,8 @@
                                                     `disponibilidade_carro`,
                                                     `descricao_carro`,
                                                     `imagem_carro`,
-                                                    `preco_diaria_carro`,
-                                                    `data_alteracao`,
-                                                    `data_criacao`,
+                                                    `ano_carro`,
+                                                    `preco_diaria_carro`,                                                    
                                                     `id_usuario`)
                                                     VALUES
                                                     (@placa_carro,
@@ -99,6 +97,7 @@
                                                     @disponibilidade_carro,
                                                     @descricao-carro,
                                                     @imagem_carro,
+                                                    @ano_carro,
                                                     @preco_diaria_carro,
                                                     @id_usuario)";
 
