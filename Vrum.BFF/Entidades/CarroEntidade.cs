@@ -8,6 +8,23 @@ namespace Vrum.BFF.Entidades
 {
     public class CarroEntidade
     {
+        public CarroEntidade(string placa, string modelo, string marca, string cor, int numeroDeAssentos, bool disponibilidade, string descricao,
+            string imagem, int? ano, double precoDiaria, DonoDocarro dono, int? codigo = null)
+        {
+            Placa = placa;
+            Modelo = modelo;
+            Marca = marca;
+            Cor = cor;
+            NumeroDeAssentos = numeroDeAssentos;
+            Disponibilidade = disponibilidade;
+            Descricao = descricao;
+            Imagem = imagem;
+            Ano = ano;
+            PrecoDaDiaria = precoDiaria;
+            Dono = dono;
+            Codigo = codigo.HasValue ? codigo.Value : 0;
+        }
+
         public CarroEntidade(CarroDto carroDto)
         {
             Codigo = carroDto.Codigo;
@@ -38,8 +55,8 @@ namespace Vrum.BFF.Entidades
         public string Modelo { get; set; }
         public string Marca { get; set; }
         public string Cor { get; set; }
-        public string NumeroDeAssentos { get; set; }
-        public string Disponibilidade { get; set; }
+        public int NumeroDeAssentos { get; set; }
+        public bool Disponibilidade { get; set; }
         public string Descricao { get; set; }
         public string Imagem { get; set; }
         public int? Ano { get; set; }

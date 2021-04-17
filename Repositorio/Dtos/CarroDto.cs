@@ -11,8 +11,8 @@ namespace Repositorio.Dtos
         public string Modelo { get; set; }
         public string Marca { get; set; }
         public string Cor { get; set; }
-        public string NumeroDeAssentos { get; set; }
-        public string Disponibilidade { get; set; }
+        public int NumeroDeAssentos { get; set; }
+        public bool Disponibilidade { get; set; }
         public string Descricao { get; set; }
         public string Imagem { get; set; }
         public int? Ano { get; set; }

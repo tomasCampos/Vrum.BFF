@@ -24,7 +24,7 @@ namespace Repositorio.Repositorios
                 modelo_carro = carro.Modelo,
                 marca_carro = carro.Marca,
                 cor_carro = carro.Cor,
-                numero_aassentos_carro = carro.NumeroDeAssentos,
+                numero_assentos_carro = carro.NumeroDeAssentos,
                 disponibilidade_carro = carro.Disponibilidade,
                 descricao_carro = carro.Descricao,
                 imagem_carro = carro.Imagem,

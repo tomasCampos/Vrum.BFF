@@ -32,6 +32,26 @@
                                                         INNER JOIN endereco e ON u.id_endereco = e.id_endereco
                                                         WHERE email_usuario = @email_usuario";
 
+        public const string SQL_OBTER_USUARIO_POR_CODIGO = @"SELECT 
+	                                                        u.id_usuario AS Codigo,
+                                                            u.email_usuario AS Email,
+                                                            u.senha_usuario AS Senha,
+                                                            u.nome_usuario AS Nome,
+                                                            u.cpf_usuario AS Cpf,
+                                                            u.telefone_usuario AS NumeroTelefone,
+                                                            u.perfil_usuario AS Perfil,
+                                                            e.id_endereco AS CodigoEndereco,
+                                                            e.chave_endereco AS ChaveIdentificacaoEndereco,
+                                                            e.cep_endereco AS CepEndereco,
+                                                            e.logradouro_endereco AS LogradouroEndereco,
+                                                            e.numero_endereco AS NumeroEndereco,
+                                                            e.complemento_endereco AS ComplementoEndereco,
+                                                            e.bairro_endereco AS BairroEndereco,
+                                                            e.uf_endereco AS UfEndereco
+                                                        FROM usuario u
+                                                        INNER JOIN endereco e ON u.id_endereco = e.id_endereco
+                                                        WHERE id_usuario = @id_usuario";
+
         public const string SQL_CADASTRAR_USUARIO = @"INSERT INTO `heroku_3dc1bcc8f5cdd12`.`usuario`
                                                     (`email_usuario`,
                                                     `senha_usuario`,
@@ -95,14 +115,14 @@
                                                     @cor_carro,
                                                     @numero_assentos_carro,
                                                     @disponibilidade_carro,
-                                                    @descricao-carro,
+                                                    @descricao_carro,
                                                     @imagem_carro,
                                                     @ano_carro,
                                                     @preco_diaria_carro,
                                                     @id_usuario)";
 
         public const string SQL_LISTAR_CARRO =  @"SELECT
-                                                    c.carro_id AS Codigo,
+                                                    c.id_carro AS Codigo,
 	                                                c.placa_carro AS Placa,
                                                     c.modelo_carro AS Modelo,
                                                     c.marca_carro AS Marca,

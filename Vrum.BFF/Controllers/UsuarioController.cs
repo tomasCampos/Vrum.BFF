@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Vrum.BFF.Controllers.Models;
 using Vrum.BFF.Controllers.Models.Usuario;
@@ -58,7 +55,7 @@ namespace Vrum.BFF.Controllers
             {
                 return BadRequest(new HttpResponseModel
                 {
-                    StatusCode= System.Net.HttpStatusCode.BadRequest,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
                     Sucesso = false,
                     Mensagem = validacao.MensagemDeErro
                 });

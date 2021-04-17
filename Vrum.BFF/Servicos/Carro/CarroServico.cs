@@ -1,28 +1,40 @@
 ﻿using Repositorio.Dtos;
 using Repositorio.Repositorios;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Vrum.BFF.Entidades;
 using Vrum.BFF.Servicos.Carro.Models;
+using Vrum.BFF.Servicos.Usuario;
 
 namespace Vrum.BFF.Servicos.Carro
 {
     public class CarroServico : ICarroServico
     {
         private readonly ICarroRepositorio _carroRepositorio;
+        private readonly IUsuarioServico _usuarioServico;
 
-        public CarroServico(ICarroRepositorio carroRepositorio)
+        public CarroServico(ICarroRepositorio carroRepositorio, IUsuarioServico usuarioServico)
         {
             _carroRepositorio = carroRepositorio;
+            _usuarioServico = usuarioServico;
         }
 
-        public async Task<CadastrarCarroServicoRespostaModel> CadastrarUsuario(CarroEntidade carro)
+        public async Task<CadastrarCarroServicoRespostaModel> CadastrarCarro(CarroEntidade carro)
         {
-            var carroJaExiste = await ObterCarro(carro.Placa) != null;
-            if (carroJaExiste)
-                return new CadastrarCarroServicoRespostaModel("Um carro com essa placa já foi cadastrado. Verifique a placa e tente novamente.");
+            var carroJaExiste = await ObterCarro(carro.Placa);
+            if (carroJaExiste.Sucesso)
+            {
+                return new CadastrarCarroServicoRespostaModel("Um carro com essa placa já foi cadastrado. Verifique a placa e tente novamente.", 
+                    CadastrarCarroServicoRespostaModel.FalhasPossiveis.PLACA_JA_CADASTRADA);
+            }
+
+            var donoDoCarro = await _usuarioServico.ObterUsuario(carro.Dono.CodigoUsuario);
+            if (!donoDoCarro.Sucesso || !string.Equals(donoDoCarro.Usuario.Perfil, "LOCADOR"))
+            {
+                return new CadastrarCarroServicoRespostaModel("O usuário a ser relacionado com esse carro é inválido. Ou não é do perfil LOCADOR ou não está cadastrado no sistema", 
+                    CadastrarCarroServicoRespostaModel.FalhasPossiveis.USUARIO_DONO_DO_CARRO_INVALIDO);
+            }
 
             var carroDto = new CarroDto()
             {
@@ -92,7 +104,7 @@ namespace Vrum.BFF.Servicos.Carro
 
     public interface ICarroServico
     {
-        Task<CadastrarCarroServicoRespostaModel> CadastrarUsuario(CarroEntidade usuario);
+        Task<CadastrarCarroServicoRespostaModel> CadastrarCarro(CarroEntidade carro);
 
         Task<List<CarroEntidade>> ListarCarros(string modelo, int? ano, string marca);
 

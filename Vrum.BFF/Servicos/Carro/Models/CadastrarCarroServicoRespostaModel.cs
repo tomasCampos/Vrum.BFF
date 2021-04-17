@@ -10,10 +10,21 @@ namespace Vrum.BFF.Servicos.Carro.Models
         public CadastrarCarroServicoRespostaModel(int codigoCarroCadastrado) : base()
         {
             CodigoCarroCadastrado = codigoCarroCadastrado;
+            EspecificacaoErro = null;
         }
 
-        public CadastrarCarroServicoRespostaModel(string mensagemErro) : base(mensagemErro) {}
+        public CadastrarCarroServicoRespostaModel(string mensagemErro, FalhasPossiveis tipoErro) : base(mensagemErro) 
+        {
+            EspecificacaoErro = tipoErro;
+        }
 
         public int CodigoCarroCadastrado { get; }
+        public FalhasPossiveis? EspecificacaoErro { get; }
+
+        public enum FalhasPossiveis
+        {
+            PLACA_JA_CADASTRADA,
+            USUARIO_DONO_DO_CARRO_INVALIDO
+        }
     }
 }

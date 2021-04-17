@@ -33,6 +33,12 @@ namespace Repositorio.Repositorios
             return result.FirstOrDefault();
         }
 
+        public async Task<UsuarioDto> ObterUsuario(int codigoUsuario)
+        {
+            var result = await _dataBase.SelecionarAsync<UsuarioDto>(AppConstants.SQL_OBTER_USUARIO_POR_CODIGO, new { id_usuario = codigoUsuario });
+            return result.FirstOrDefault();
+        }
+
         #region METODOS PRIVADOS
 
         private async Task CadastrarEnderecoDoUsuario(string chave, string cep, string bairro, string complemento, string logradouro, string numero, string uf)
@@ -62,5 +68,6 @@ namespace Repositorio.Repositorios
     {
         Task CadastrarUsuario(UsuarioDto usuario);
         Task<UsuarioDto> ObterUsuario(string emailUsuario);
+        Task<UsuarioDto> ObterUsuario(int codigoUsuario);
     }
 }
