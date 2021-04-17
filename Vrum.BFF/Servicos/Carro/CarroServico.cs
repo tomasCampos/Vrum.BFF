@@ -62,9 +62,9 @@ namespace Vrum.BFF.Servicos.Carro
             return new CadastrarCarroServicoRespostaModel(respostaObterCarro.Carro.Codigo);
         }
 
-        public async Task<List<CarroEntidade>> ListarCarros(string modelo, int? ano, string marca)
+        public async Task<List<CarroEntidade>> ListarCarros(string modelo, int? ano, string marca, string cidade, string estado, int? codigoUsuarioDonoDoCarro)
         {
-            var carrosDto = await _carroRepositorio.ListarCarros(modelo, ano, marca, null, null);
+            var carrosDto = await _carroRepositorio.ListarCarros(modelo, ano, marca, null, null, cidade, estado, codigoUsuarioDonoDoCarro);
 
             var resposta = new List<CarroEntidade>();
             foreach (var dto in carrosDto)
@@ -77,7 +77,7 @@ namespace Vrum.BFF.Servicos.Carro
 
         public async Task<ObterCarroServicoRespostaModel> ObterCarro(int codigo)
         {
-            var carrosDto = await _carroRepositorio.ListarCarros(null, null, null, null, codigo);
+            var carrosDto = await _carroRepositorio.ListarCarros(null, null, null, null, codigo, null, null, null);
             var carroDto = carrosDto.FirstOrDefault();
 
             if (carroDto == null)
@@ -90,7 +90,7 @@ namespace Vrum.BFF.Servicos.Carro
 
         public async Task<ObterCarroServicoRespostaModel> ObterCarro(string placa)
         {
-            var carrosDto = await _carroRepositorio.ListarCarros(null, null, null, placa, null);
+            var carrosDto = await _carroRepositorio.ListarCarros(null, null, null, placa, null, null, null, null);
             var carroDto = carrosDto.FirstOrDefault();
 
             if (carroDto == null)
@@ -106,7 +106,7 @@ namespace Vrum.BFF.Servicos.Carro
     {
         Task<CadastrarCarroServicoRespostaModel> CadastrarCarro(CarroEntidade carro);
 
-        Task<List<CarroEntidade>> ListarCarros(string modelo, int? ano, string marca);
+        Task<List<CarroEntidade>> ListarCarros(string modelo, int? ano, string marca, string cidade, string estado, int? codigoUsuarioDonoDoCarro);
 
         Task<ObterCarroServicoRespostaModel> ObterCarro(int codigo);
 

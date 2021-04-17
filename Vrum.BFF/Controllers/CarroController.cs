@@ -21,6 +21,7 @@ namespace Vrum.BFF.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CadastrarCarro([FromBody] CadastrarCarroRequestModel requisicao)
         {
             var validacao = requisicao.Validar();
@@ -66,6 +67,14 @@ namespace Vrum.BFF.Controllers
                 Mensagem = resultado.Mensagem,
                 Corpo = new { CodigoCarroCadastrado = resultado.CodigoCarroCadastrado }
             });
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> ListarCarro([FromQuery] string modelo, string marca, string cidade, string estado, int? ano = null, int? codigoUsuarioDonoDoCarro = null)
+        {
+            var resultado = await _carroServico.ListarCarros(modelo, ano, marca, cidade, estado, codigoUsuarioDonoDoCarro);
+            return Ok(resultado);
         }
     }
 }

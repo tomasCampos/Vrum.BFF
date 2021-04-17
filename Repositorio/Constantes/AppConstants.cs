@@ -121,7 +121,7 @@
                                                     @preco_diaria_carro,
                                                     @id_usuario)";
 
-        public const string SQL_LISTAR_CARRO =  @"SELECT
+        public const string SQL_LISTAR_CARRO = @"SELECT
                                                     c.id_carro AS Codigo,
 	                                                c.placa_carro AS Placa,
                                                     c.modelo_carro AS Modelo,
@@ -133,6 +133,7 @@
                                                     c.imagem_carro AS Imagem,
                                                     c.ano_carro AS Ano,
                                                     c.preco_diaria_carro AS PrecoDaDiaria,
+                                                    u.id_usuario AS CodigoDoUsuarioDoDono,
                                                     u.nome_usuario AS NomeDoDono,
                                                     u.email_usuario AS EmailDoDono,
                                                     u.telefone_usuario AS TelefoneDoDono,
