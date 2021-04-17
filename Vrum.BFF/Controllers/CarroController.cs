@@ -74,7 +74,35 @@ namespace Vrum.BFF.Controllers
         public async Task<IActionResult> ListarCarro([FromQuery] string modelo, string marca, string cidade, string estado, int? ano = null, int? codigoUsuarioDonoDoCarro = null)
         {
             var resultado = await _carroServico.ListarCarros(modelo, ano, marca, cidade, estado, codigoUsuarioDonoDoCarro);
-            return Ok(resultado);
+            return Ok(new HttpResponseModel 
+            {
+                Sucesso = true,
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Corpo = resultado
+            });
+        }
+
+        [HttpPatch("{codigoCarro}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> AtualizarCarro([FromRoute] int codigoCarro, [FromBody] AlterarCarroRequestModel requisicao)
+        {
+            var resultadoAtualizacao = await _carroServico.Atualizarcarro(codigoCarro, requisicao);
+
+            if (!resultadoAtualizacao.Sucesso)
+            {
+                return NotFound(new HttpResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.NotFound,
+                    Sucesso = false,
+                    Mensagem = resultadoAtualizacao.Mensagem
+                });
+            }
+
+            return Ok(new HttpResponseModel 
+            {
+                Sucesso = true,
+                StatusCode = System.Net.HttpStatusCode.OK
+            });
         }
     }
 }

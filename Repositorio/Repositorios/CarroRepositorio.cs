@@ -16,6 +16,24 @@ namespace Repositorio.Repositorios
             _dataBase = new DataBaseConnector();
         }
 
+        public async Task AtualizarCarro(CarroDto carro)
+        {
+            await _dataBase.ExecutarAsync(AppConstants.SQL_ATUALIZAR_CARRO, new
+            {
+                placa_carro = carro.Placa,
+                modelo_carro = carro.Modelo,
+                marca_carro = carro.Marca,
+                cor_carro = carro.Cor,
+                numero_assentos_carro = carro.NumeroDeAssentos,
+                disponibilidade_carro = carro.Disponibilidade,
+                descricao_carro = carro.Descricao,
+                imagem_carro = carro.Imagem,
+                ano_carro = carro.Ano,
+                preco_diaria_carro = carro.PrecoDaDiaria,
+                id_carro = carro.Codigo
+            });
+        }
+
         public async Task CadastrarCarro(CarroDto carro)
         {
             await _dataBase.ExecutarAsync(AppConstants.SQL_CADASTRAR_CARRO, new 
@@ -47,7 +65,7 @@ namespace Repositorio.Repositorios
             if (!string.IsNullOrEmpty(placa))
                 filtro += $" AND c.placa_carro = '{placa}'";
             if(codigo.HasValue)
-                filtro = $" AND c.carro_id = {codigo.Value}";
+                filtro = $" AND c.id_carro = {codigo.Value}";
             if (!string.IsNullOrEmpty(cidade))
                 filtro += $" AND e.logradouro_endereco LIKE '%{cidade}%'";
             if (!string.IsNullOrEmpty(estado))
@@ -67,5 +85,7 @@ namespace Repositorio.Repositorios
         Task CadastrarCarro(CarroDto carro);
 
         Task<List<CarroDto>> ListarCarros(string modelo, int? ano, string marca, string placa, int? codigo, string cidade, string estado, int? codigoUsuarioDonoDoCarro);
+
+        Task AtualizarCarro(CarroDto carro);
     }
 }

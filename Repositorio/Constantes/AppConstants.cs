@@ -145,7 +145,7 @@
                                                 WHERE 1 = 1
                                                 {0}";
 
-        public const string SQL_ATUALIZAR_CARRO =   @"UPDATE carro
+        public const string SQL_ATUALIZAR_CARRO = @"UPDATE carro
                                                     SET
                                                     placa_carro = @placa_carro,
                                                     modelo_carro = @modelo_carro,
@@ -155,6 +155,7 @@
                                                     disponibilidade_carro = @disponibilidade_carro,
                                                     descricao_carro = @descricao_carro,
                                                     imagem_carro = @imagem_carro,
+                                                    ano_carro = @ano_carro,
                                                     preco_diaria_carro = @preco_diaria_carro
                                                     WHERE id_carro = @id_carro";
 

@@ -3,6 +3,7 @@ using Repositorio.Repositorios;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Vrum.BFF.Controllers.Models.Carro;
 using Vrum.BFF.Entidades;
 using Vrum.BFF.Servicos.Carro.Models;
 using Vrum.BFF.Servicos.Usuario;
@@ -18,6 +19,32 @@ namespace Vrum.BFF.Servicos.Carro
         {
             _carroRepositorio = carroRepositorio;
             _usuarioServico = usuarioServico;
+        }
+
+        public async Task<AtualizarCarroServicoRespostaModel> Atualizarcarro(int codigoCarro, AlterarCarroRequestModel novosDadosDoCarro)
+        {
+            var respostaObterCarro = await ObterCarro(codigoCarro);
+            if (!respostaObterCarro.Sucesso)
+                return new AtualizarCarroServicoRespostaModel("Carro especificado não encontrado");
+
+            var carro = respostaObterCarro.Carro;
+            var carroDto = new CarroDto()
+            {
+                Codigo = carro.Codigo,
+                Placa = string.IsNullOrEmpty(novosDadosDoCarro.Placa) ? carro.Placa : novosDadosDoCarro.Placa,
+                Marca = carro.Marca = string.IsNullOrEmpty(novosDadosDoCarro.Marca) ? carro.Marca : novosDadosDoCarro.Marca,
+                Modelo = carro.Modelo = string.IsNullOrEmpty(novosDadosDoCarro.Modelo) ? carro.Modelo : novosDadosDoCarro.Modelo,
+                Ano = carro.Ano = !novosDadosDoCarro.Ano.HasValue ? carro.Ano : novosDadosDoCarro.Ano.Value,
+                NumeroDeAssentos = carro.NumeroDeAssentos = !novosDadosDoCarro.NumeroDeAssentos.HasValue ? carro.NumeroDeAssentos : novosDadosDoCarro.NumeroDeAssentos.Value,
+                PrecoDaDiaria = carro.PrecoDaDiaria = !novosDadosDoCarro.PrecoDaDiaria.HasValue ? carro.PrecoDaDiaria : novosDadosDoCarro.PrecoDaDiaria.Value,
+                Cor = string.IsNullOrEmpty(novosDadosDoCarro.Cor) ? carro.Cor : novosDadosDoCarro.Cor,
+                Descricao = carro.Descricao = string.IsNullOrEmpty(novosDadosDoCarro.Descricao) ? carro.Descricao : novosDadosDoCarro.Descricao,
+                Disponibilidade = carro.Disponibilidade = !novosDadosDoCarro.Disponibilidade.HasValue ? carro.Disponibilidade : novosDadosDoCarro.Disponibilidade.Value,
+                Imagem = carro.Imagem = string.IsNullOrEmpty(novosDadosDoCarro.Imagem) ? carro.Imagem : novosDadosDoCarro.Imagem
+            };
+
+            await _carroRepositorio.AtualizarCarro(carroDto);
+            return new AtualizarCarroServicoRespostaModel();
         }
 
         public async Task<CadastrarCarroServicoRespostaModel> CadastrarCarro(CarroEntidade carro)
@@ -111,5 +138,7 @@ namespace Vrum.BFF.Servicos.Carro
         Task<ObterCarroServicoRespostaModel> ObterCarro(int codigo);
 
         Task<ObterCarroServicoRespostaModel> ObterCarro(string placa);
+
+        Task<AtualizarCarroServicoRespostaModel> Atualizarcarro(int codigoCarro, AlterarCarroRequestModel novosDadosDoCarro);
     }
 }
