@@ -32,6 +32,26 @@
                                                         INNER JOIN endereco e ON u.id_endereco = e.id_endereco
                                                         WHERE email_usuario = @email_usuario";
 
+        public const string SQL_OBTER_USUARIO_POR_CODIGO = @"SELECT 
+	                                                        u.id_usuario AS Codigo,
+                                                            u.email_usuario AS Email,
+                                                            u.senha_usuario AS Senha,
+                                                            u.nome_usuario AS Nome,
+                                                            u.cpf_usuario AS Cpf,
+                                                            u.telefone_usuario AS NumeroTelefone,
+                                                            u.perfil_usuario AS Perfil,
+                                                            e.id_endereco AS CodigoEndereco,
+                                                            e.chave_endereco AS ChaveIdentificacaoEndereco,
+                                                            e.cep_endereco AS CepEndereco,
+                                                            e.logradouro_endereco AS LogradouroEndereco,
+                                                            e.numero_endereco AS NumeroEndereco,
+                                                            e.complemento_endereco AS ComplementoEndereco,
+                                                            e.bairro_endereco AS BairroEndereco,
+                                                            e.uf_endereco AS UfEndereco
+                                                        FROM usuario u
+                                                        INNER JOIN endereco e ON u.id_endereco = e.id_endereco
+                                                        WHERE id_usuario = @id_usuario";
+
         public const string SQL_CADASTRAR_USUARIO = @"INSERT INTO `heroku_3dc1bcc8f5cdd12`.`usuario`
                                                     (`email_usuario`,
                                                     `senha_usuario`,
@@ -77,8 +97,7 @@
         #region CARRO_SQL
 
         public const string SQL_CADASTRAR_CARRO =   @"INSERT INTO `heroku_3dc1bcc8f5cdd12`.`carro`
-                                                    (`id_carro`,
-                                                    `placa_carro`,
+                                                    (`placa_carro`,
                                                     `modelo_carro`,
                                                     `marca_carro`,
                                                     `cor_carro`,
@@ -86,9 +105,8 @@
                                                     `disponibilidade_carro`,
                                                     `descricao_carro`,
                                                     `imagem_carro`,
-                                                    `preco_diaria_carro`,
-                                                    `data_alteracao`,
-                                                    `data_criacao`,
+                                                    `ano_carro`,
+                                                    `preco_diaria_carro`,                                                    
                                                     `id_usuario`)
                                                     VALUES
                                                     (@placa_carro,
@@ -97,13 +115,14 @@
                                                     @cor_carro,
                                                     @numero_assentos_carro,
                                                     @disponibilidade_carro,
-                                                    @descricao-carro,
+                                                    @descricao_carro,
                                                     @imagem_carro,
+                                                    @ano_carro,
                                                     @preco_diaria_carro,
                                                     @id_usuario)";
 
-        public const string SQL_LISTAR_CARRO =  @"SELECT
-                                                    c.carro_id AS Codigo,
+        public const string SQL_LISTAR_CARRO = @"SELECT
+                                                    c.id_carro AS Codigo,
 	                                                c.placa_carro AS Placa,
                                                     c.modelo_carro AS Modelo,
                                                     c.marca_carro AS Marca,
@@ -114,6 +133,7 @@
                                                     c.imagem_carro AS Imagem,
                                                     c.ano_carro AS Ano,
                                                     c.preco_diaria_carro AS PrecoDaDiaria,
+                                                    u.id_usuario AS CodigoDoUsuarioDoDono,
                                                     u.nome_usuario AS NomeDoDono,
                                                     u.email_usuario AS EmailDoDono,
                                                     u.telefone_usuario AS TelefoneDoDono,
@@ -122,7 +142,8 @@
                                                 FROM carro c
                                                 INNER JOIN usuario u ON c.id_usuario = u.id_usuario
                                                 INNER JOIN endereco e ON u.id_endereco = e.id_endereco
-                                                WHERE 1 = 1";
+                                                WHERE 1 = 1
+                                                {0}";
 
         public const string SQL_ATUALIZAR_CARRO =   @"UPDATE carro
                                                     SET
@@ -135,8 +156,7 @@
                                                     descricao_carro = @descricao_carro,
                                                     imagem_carro = @imagem_carro,
                                                     preco_diaria_carro = @preco_diaria_carro
-                                                    WHERE id_carro = @id_carro;
-                                                    ";
+                                                    WHERE id_carro = @id_carro";
 
         public const string SQL_DELETAR_CARRO = "DELETE FROM carro WHERE carro.id_carro = @id_carro";
 

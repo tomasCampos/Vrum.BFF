@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Vrum.BFF.Controllers.Models;
 using Vrum.BFF.Controllers.Models.Usuario;
@@ -51,6 +48,7 @@ namespace Vrum.BFF.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CadastrarUsuario([FromBody] CadastrarUsuarioRequestModel requisicao)
         {
             var validacao = requisicao.Validar();
@@ -58,7 +56,7 @@ namespace Vrum.BFF.Controllers
             {
                 return BadRequest(new HttpResponseModel
                 {
-                    StatusCode= System.Net.HttpStatusCode.BadRequest,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
                     Sucesso = false,
                     Mensagem = validacao.MensagemDeErro
                 });
@@ -90,6 +88,7 @@ namespace Vrum.BFF.Controllers
         [HttpPost("autenticacao")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> AutenticarUsuario([FromBody] AutenticarUsuarioRequestModel requisicao)
         {
             var validacao = requisicao.Validar();
