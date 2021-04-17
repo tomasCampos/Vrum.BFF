@@ -2,6 +2,8 @@
 using Repositorio.Infraestrutura;
 using Repositorio.Constantes;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Repositorio.Repositorios
 {
@@ -31,10 +33,33 @@ namespace Repositorio.Repositorios
                 id_usuario = carro.CodigoDoUsuarioDoDono
             });
         }
+
+        public async Task<List<CarroDto>> ListarCarros(string modelo, int? ano, string marca, string placa, int? codigo)
+        {
+            var filtro = string.Empty;
+
+            if (!string.IsNullOrEmpty(modelo))
+                filtro += $"AND c.modelo_carro LIKE %'{modelo}'%";
+            if (ano.HasValue)
+                filtro += $"AND c.ano_carro = {ano.Value}";
+            if (!string.IsNullOrEmpty(marca))
+                filtro += $"AND c.marca_carro LIKE %'{marca}'%";
+            if (!string.IsNullOrEmpty(placa))
+                filtro += $"AND c.placa_carro = '{placa}'";
+            if(codigo.HasValue)
+                filtro = $"AND c.carro_id = {codigo.Value}";
+
+            var query = string.Format(AppConstants.SQL_LISTAR_CARRO, filtro);
+            var carros = await _dataBase.SelecionarAsync<CarroDto>(query);
+
+            return carros.ToList();
+        }
     }
 
     public interface ICarroRepositorio
     {
         Task CadastrarCarro(CarroDto carro);
+
+        Task<List<CarroDto>> ListarCarros(string modelo, int? ano, string marca, string placa, int? codigo);
     }
 }

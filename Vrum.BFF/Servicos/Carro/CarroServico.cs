@@ -50,19 +50,43 @@ namespace Vrum.BFF.Servicos.Carro
             return new CadastrarCarroServicoRespostaModel(respostaObterCarro.Carro.Codigo);
         }
 
-        public Task<List<CarroEntidade>> ListarCarros(string modelo, int? ano, string marca)
+        public async Task<List<CarroEntidade>> ListarCarros(string modelo, int? ano, string marca)
         {
-            throw new NotImplementedException();
+            var carrosDto = await _carroRepositorio.ListarCarros(modelo, ano, marca, null, null);
+
+            var resposta = new List<CarroEntidade>();
+            foreach (var dto in carrosDto)
+            {
+                resposta.Add(new CarroEntidade(dto));
+            }
+
+            return resposta;
         }
 
-        public Task<ObterCarroServicoRespostaModel> ObterCarro(int codigo)
+        public async Task<ObterCarroServicoRespostaModel> ObterCarro(int codigo)
         {
-            throw new NotImplementedException();
+            var carrosDto = await _carroRepositorio.ListarCarros(null, null, null, null, codigo);
+            var carroDto = carrosDto.FirstOrDefault();
+
+            if (carroDto == null)
+                return new ObterCarroServicoRespostaModel("Não existe um carro com o código especificado.");
+
+            var carro = new CarroEntidade(carroDto);
+            var resposta = new ObterCarroServicoRespostaModel(carro);
+            return resposta;
         }
 
-        public Task<ObterCarroServicoRespostaModel> ObterCarro(string placa)
+        public async Task<ObterCarroServicoRespostaModel> ObterCarro(string placa)
         {
-            throw new NotImplementedException();
+            var carrosDto = await _carroRepositorio.ListarCarros(null, null, null, placa, null);
+            var carroDto = carrosDto.FirstOrDefault();
+
+            if (carroDto == null)
+                return new ObterCarroServicoRespostaModel("Não existe um carro com a placa especificada.");
+
+            var carro = new CarroEntidade(carroDto);
+            var resposta = new ObterCarroServicoRespostaModel(carro);
+            return resposta;
         }
     }
 

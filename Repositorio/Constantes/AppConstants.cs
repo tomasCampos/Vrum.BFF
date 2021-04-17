@@ -121,7 +121,8 @@
                                                 FROM carro c
                                                 INNER JOIN usuario u ON c.id_usuario = u.id_usuario
                                                 INNER JOIN endereco e ON u.id_endereco = e.id_endereco
-                                                WHERE 1 = 1";
+                                                WHERE 1 = 1
+                                                {0}";
 
         public const string SQL_ATUALIZAR_CARRO =   @"UPDATE carro
                                                     SET
@@ -134,8 +135,7 @@
                                                     descricao_carro = @descricao_carro,
                                                     imagem_carro = @imagem_carro,
                                                     preco_diaria_carro = @preco_diaria_carro
-                                                    WHERE id_carro = @id_carro;
-                                                    ";
+                                                    WHERE id_carro = @id_carro";
 
         public const string SQL_DELETAR_CARRO = "DELETE FROM carro WHERE carro.id_carro = @id_carro";
 
