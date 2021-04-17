@@ -2,11 +2,17 @@
 {
     public class AppConstants
     {
+        #region INFRAESTRUTURA
+
         public const string CONNECTION_STRING = "server=us-cdbr-east-03.cleardb.com;user=bf9c7fe9712622;password=e459392c;database=heroku_3dc1bcc8f5cdd12;SSL Mode=None";
 
         public const string CHAVE_CIFRA = "1e64fdce-e561-4f3d-bb78-0d7c8c86d14b";
 
-        public const string SQL_OBTER_USUARIO_POR_EMAIL = @"SELECT 
+        #endregion
+
+        #region USUARIO_SQL
+
+        public const string SQL_OBTER_USUARIO_POR_EMAIL =   @"SELECT 
 	                                                        u.id_usuario AS Codigo,
                                                             u.email_usuario AS Email,
                                                             u.senha_usuario AS Senha,
@@ -43,6 +49,10 @@
                                                     @perfil_usuario,
                                                     @id_endereco);";
 
+        #endregion
+
+        #region ENDERECO_SQL
+
         public const string SQL_CADASTRAR_ENDERECO = @"INSERT INTO `heroku_3dc1bcc8f5cdd12`.`endereco`
                                                     (`chave_endereco`,
                                                     `cep_endereco`,
@@ -61,5 +71,75 @@
                                                     @uf_endereco);";
 
         public const string SQL_OBTER_CODIGO_ENDERECO_POR_CHAVE = "SELECT id_endereco FROM `heroku_3dc1bcc8f5cdd12`.`endereco` WHERE chave_endereco = @chave_endereco";
+
+        #endregion
+
+        #region CARRO_SQL
+
+        public const string SQL_CADASTRAR_CARRO =   @"INSERT INTO `heroku_3dc1bcc8f5cdd12`.`carro`
+                                                    (`id_carro`,
+                                                    `placa_carro`,
+                                                    `modelo_carro`,
+                                                    `marca_carro`,
+                                                    `cor_carro`,
+                                                    `numero_assentos_carro`,
+                                                    `disponibilidade_carro`,
+                                                    `descricao_carro`,
+                                                    `imagem_carro`,
+                                                    `preco_diaria_carro`,
+                                                    `data_alteracao`,
+                                                    `data_criacao`,
+                                                    `id_usuario`)
+                                                    VALUES
+                                                    (@placa_carro,
+                                                    @modelo_carro,
+                                                    @marca_carro,
+                                                    @cor_carro,
+                                                    @numero_assentos_carro,
+                                                    @disponibilidade_carro,
+                                                    @descricao-carro,
+                                                    @imagem_carro,
+                                                    @preco_diaria_carro,
+                                                    @id_usuario)";
+
+        public const string SQL_LISTAR_CARRO =  @"SELECT
+                                                    c.carro_id AS Codigo,
+	                                                c.placa_carro AS Placa,
+                                                    c.modelo_carro AS Modelo,
+                                                    c.marca_carro AS Marca,
+                                                    c.cor_carro AS Cor,
+                                                    c.numero_assentos_carro AS NumeroDeAssentos,
+                                                    c.disponibilidade_carro AS Disponibilidade,
+                                                    c.descricao_carro AS Descricao,
+                                                    c.imagem_carro AS Imagem,
+                                                    c.ano_carro AS Ano,
+                                                    c.preco_diaria_carro AS PrecoDaDiaria,
+                                                    u.nome_usuario AS NomeDoDono,
+                                                    u.email_usuario AS EmailDoDono,
+                                                    u.telefone_usuario AS TelefoneDoDono,
+                                                    e.logradouro_endereco AS Localizacao,
+                                                    e.uf_endereco AS EstadoLocalizacao
+                                                FROM carro c
+                                                INNER JOIN usuario u ON c.id_usuario = u.id_usuario
+                                                INNER JOIN endereco e ON u.id_endereco = e.id_endereco
+                                                WHERE 1 = 1";
+
+        public const string SQL_ATUALIZAR_CARRO =   @"UPDATE carro
+                                                    SET
+                                                    placa_carro = @placa_carro,
+                                                    modelo_carro = @modelo_carro,
+                                                    marca_carro = @marca_carro,
+                                                    cor_carro = @cor_carro,
+                                                    numero_assentos_carro = @numero_assentos_carro,
+                                                    disponibilidade_carro = @disponibilidade_carro,
+                                                    descricao_carro = @descricao_carro,
+                                                    imagem_carro = @imagem_carro,
+                                                    preco_diaria_carro = @preco_diaria_carro
+                                                    WHERE id_carro = @id_carro;
+                                                    ";
+
+        public const string SQL_DELETAR_CARRO = "DELETE FROM carro WHERE carro.id_carro = @id_carro";
+
+        #endregion
     }
 }
