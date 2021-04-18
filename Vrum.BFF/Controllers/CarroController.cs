@@ -82,6 +82,19 @@ namespace Vrum.BFF.Controllers
             });
         }
 
+        [HttpGet("buscaGenerica")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> ListarCarro([FromQuery] string termo, int? codigoUsuarioDonoDoCarro = null)
+        {
+            var resultado = await _carroServico.ListarCarros(termo, codigoUsuarioDonoDoCarro);
+            return Ok(new HttpResponseModel
+            {
+                Sucesso = true,
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Corpo = resultado
+            });
+        }
+
         [HttpGet("{codigo}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

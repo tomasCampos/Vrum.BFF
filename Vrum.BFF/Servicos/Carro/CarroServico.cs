@@ -107,6 +107,19 @@ namespace Vrum.BFF.Servicos.Carro
             return resposta;
         }
 
+        public async Task<List<CarroEntidade>> ListarCarros(string termo, int? codigoUsuarioDonoDoCarro)
+        {
+            var carrosDto = await _carroRepositorio.ListarCarros(termo, codigoUsuarioDonoDoCarro);
+
+            var resposta = new List<CarroEntidade>();
+            foreach (var dto in carrosDto)
+            {
+                resposta.Add(new CarroEntidade(dto));
+            }
+
+            return resposta;
+        }
+
         public async Task<ObterCarroServicoRespostaModel> ObterCarro(int codigo)
         {
             var carrosDto = await _carroRepositorio.ListarCarros(null, null, null, null, codigo, null, null, null);
@@ -139,6 +152,8 @@ namespace Vrum.BFF.Servicos.Carro
         Task<CadastrarCarroServicoRespostaModel> CadastrarCarro(CarroEntidade carro);
 
         Task<List<CarroEntidade>> ListarCarros(string modelo, int? ano, string marca, string cidade, string estado, int? codigoUsuarioDonoDoCarro);
+
+        Task<List<CarroEntidade>> ListarCarros(string termo, int? codigoUsuarioDonoDoCarro);
 
         Task<ObterCarroServicoRespostaModel> ObterCarro(int codigo);
 

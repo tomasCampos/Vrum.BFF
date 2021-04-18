@@ -83,6 +83,23 @@ namespace Repositorio.Repositorios
 
             return carros.ToList();
         }
+
+        public async Task<List<CarroDto>> ListarCarros(string termo, int? codigoUsuarioDonoDoCarro)
+        {
+            var filtro = @$"(c.placa_carro LIKE '%{termo}%' OR
+                        c.cor_carro LIKE '%{termo}%' OR
+                        c.modelo_carro LIKE '%{termo}%' OR
+                        c.marca_carro LIKE '%{termo}%' OR
+                        e.logradouro_endereco LIKE '%{termo}%')";
+
+            if (codigoUsuarioDonoDoCarro.HasValue)
+                filtro += $" AND u.id_usuario = {codigoUsuarioDonoDoCarro.Value}";
+
+            var query = string.Format(AppConstants.SQL_LISTAR_CARRO_FILTRO_GENERICO, filtro);
+            var carros = await _dataBase.SelecionarAsync<CarroDto>(query);
+
+            return carros.ToList();
+        }
     }
 
     public interface ICarroRepositorio
@@ -90,6 +107,7 @@ namespace Repositorio.Repositorios
         Task CadastrarCarro(CarroDto carro);
 
         Task<List<CarroDto>> ListarCarros(string modelo, int? ano, string marca, string placa, int? codigo, string cidade, string estado, int? codigoUsuarioDonoDoCarro);
+        Task<List<CarroDto>> ListarCarros(string termo, int? codigoUsuarioDonoDoCarro);
 
         Task AtualizarCarro(CarroDto carro);
 

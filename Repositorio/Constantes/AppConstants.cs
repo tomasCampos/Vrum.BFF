@@ -145,6 +145,31 @@
                                                 WHERE 1 = 1
                                                 {0}";
 
+        public const string SQL_LISTAR_CARRO_FILTRO_GENERICO = @"
+                                                                SELECT
+	                                                                c.id_carro AS Codigo,
+	                                                                c.placa_carro AS Placa,
+	                                                                c.modelo_carro AS Modelo,
+	                                                                c.marca_carro AS Marca,
+	                                                                c.cor_carro AS Cor,
+	                                                                c.numero_assentos_carro AS NumeroDeAssentos,
+	                                                                c.disponibilidade_carro AS Disponibilidade,
+	                                                                c.descricao_carro AS Descricao,
+	                                                                c.imagem_carro AS Imagem,
+	                                                                c.ano_carro AS Ano,
+	                                                                c.preco_diaria_carro AS PrecoDaDiaria,
+	                                                                u.id_usuario AS CodigoDoUsuarioDoDono,
+	                                                                u.nome_usuario AS NomeDoDono,
+	                                                                u.email_usuario AS EmailDoDono,
+	                                                                u.telefone_usuario AS TelefoneDoDono,
+	                                                                e.logradouro_endereco AS Localizacao,
+	                                                                e.uf_endereco AS EstadoLocalizacao
+                                                                FROM carro c
+                                                                INNER JOIN usuario u ON c.id_usuario = u.id_usuario
+                                                                INNER JOIN endereco e ON u.id_endereco = e.id_endereco
+                                                                WHERE
+                                                                {0}";
+
         public const string SQL_ATUALIZAR_CARRO = @"UPDATE carro
                                                     SET
                                                     placa_carro = @placa_carro,
