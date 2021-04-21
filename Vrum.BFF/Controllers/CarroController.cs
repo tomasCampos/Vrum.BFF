@@ -71,9 +71,10 @@ namespace Vrum.BFF.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> ListarCarro([FromQuery] string modelo, string marca, string cidade, string estado, int? ano = null, int? codigoUsuarioDonoDoCarro = null)
+        public async Task<IActionResult> ListarCarro([FromQuery] string modelo, string marca, string cidade, string estado, int? ano = null, 
+            int? codigoUsuarioDonoDoCarro = null, bool? disponibilidade = null)
         {
-            var resultado = await _carroServico.ListarCarros(modelo, ano, marca, cidade, estado, codigoUsuarioDonoDoCarro);
+            var resultado = await _carroServico.ListarCarros(modelo, ano, marca, cidade, estado, codigoUsuarioDonoDoCarro, disponibilidade);
             return Ok(new HttpResponseModel 
             {
                 Sucesso = true,
@@ -84,9 +85,9 @@ namespace Vrum.BFF.Controllers
 
         [HttpGet("buscaGenerica")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> ListarCarro([FromQuery] string termo, int? codigoUsuarioDonoDoCarro = null)
+        public async Task<IActionResult> ListarCarro([FromQuery] string termo, int? codigoUsuarioDonoDoCarro = null, bool? disponibilidade = null)
         {
-            var resultado = await _carroServico.ListarCarros(termo, codigoUsuarioDonoDoCarro);
+            var resultado = await _carroServico.ListarCarros(termo, codigoUsuarioDonoDoCarro, disponibilidade);
             return Ok(new HttpResponseModel
             {
                 Sucesso = true,

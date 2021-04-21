@@ -57,7 +57,7 @@ namespace Repositorio.Repositorios
             await _dataBase.ExecutarAsync(AppConstants.SQL_DELETAR_CARRO, new { id_carro = codigoCarro });
         }
 
-        public async Task<List<CarroDto>> ListarCarros(string modelo, int? ano, string marca, string placa, int? codigo, string cidade, string estado, int? codigoUsuarioDonoDoCarro)
+        public async Task<List<CarroDto>> ListarCarros(string modelo, int? ano, string marca, string placa, int? codigo, string cidade, string estado, int? codigoUsuarioDonoDoCarro, bool? disponibilidade)
         {
             var filtro = string.Empty;
 
@@ -71,6 +71,8 @@ namespace Repositorio.Repositorios
                 filtro += $" AND c.placa_carro = '{placa}'";
             if(codigo.HasValue)
                 filtro = $" AND c.id_carro = {codigo.Value}";
+            if (disponibilidade.HasValue)
+                filtro += $" AND c.disponibilidade_carro = {disponibilidade.Value}";
             if (!string.IsNullOrEmpty(cidade))
                 filtro += $" AND e.logradouro_endereco LIKE '%{cidade}%'";
             if (!string.IsNullOrEmpty(estado))
@@ -84,7 +86,7 @@ namespace Repositorio.Repositorios
             return carros.ToList();
         }
 
-        public async Task<List<CarroDto>> ListarCarros(string termo, int? codigoUsuarioDonoDoCarro)
+        public async Task<List<CarroDto>> ListarCarros(string termo, int? codigoUsuarioDonoDoCarro, bool? disponibilidade)
         {
             var filtro = @$"(c.placa_carro LIKE '%{termo}%' OR
                         c.cor_carro LIKE '%{termo}%' OR
@@ -94,6 +96,9 @@ namespace Repositorio.Repositorios
 
             if (codigoUsuarioDonoDoCarro.HasValue)
                 filtro += $" AND u.id_usuario = {codigoUsuarioDonoDoCarro.Value}";
+
+            if (disponibilidade.HasValue)
+                filtro += $" AND c.disponibilidade_carro = {disponibilidade.Value}";
 
             var query = string.Format(AppConstants.SQL_LISTAR_CARRO_FILTRO_GENERICO, filtro);
             var carros = await _dataBase.SelecionarAsync<CarroDto>(query);
@@ -106,8 +111,8 @@ namespace Repositorio.Repositorios
     {
         Task CadastrarCarro(CarroDto carro);
 
-        Task<List<CarroDto>> ListarCarros(string modelo, int? ano, string marca, string placa, int? codigo, string cidade, string estado, int? codigoUsuarioDonoDoCarro);
-        Task<List<CarroDto>> ListarCarros(string termo, int? codigoUsuarioDonoDoCarro);
+        Task<List<CarroDto>> ListarCarros(string modelo, int? ano, string marca, string placa, int? codigo, string cidade, string estado, int? codigoUsuarioDonoDoCarro, bool? disponibilidade);
+        Task<List<CarroDto>> ListarCarros(string termo, int? codigoUsuarioDonoDoCarro, bool? disponibilidade);
 
         Task AtualizarCarro(CarroDto carro);
 
