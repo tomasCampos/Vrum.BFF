@@ -70,8 +70,7 @@
                                                     @id_endereco);";
 
         public const string SQL_ATUALIZAR_USUARIO = @"UPDATE 
-	                                                    usuario,
-                                                        endereco
+	                                                    usuario
                                                     INNER JOIN endereco ON
 	                                                    usuario.id_endereco = endereco.id_endereco
                                                     SET
@@ -86,7 +85,7 @@
                                                         endereco.logradouro_endereco = @logradouro_endereco,
                                                         endereco.numero_endereco = @numero_endereco,
                                                         endereco.uf_endereco = @uf_endereco
-                                                  WHERE `id_usuario` = @id_usuario";
+                                                  WHERE usuario.id_usuario = @id_usuario";
 
         #endregion
 

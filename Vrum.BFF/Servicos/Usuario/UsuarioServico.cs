@@ -6,6 +6,7 @@ using Repositorio.Dtos;
 using Vrum.BFF.Util;
 using static Repositorio.Constantes.AppConstants;
 using System;
+using Vrum.BFF.Controllers.Models.Usuario;
 
 namespace Vrum.BFF.Servicos.Usuario
 {
@@ -16,6 +17,41 @@ namespace Vrum.BFF.Servicos.Usuario
         public UsuarioServico(IUsuarioRepositorio usuarioRepositorio)
         {
             _usuarioRepositorio = usuarioRepositorio;
+        }
+
+        public async Task<AtualizarUsuarioServicoRespostaModel> AtualizarUsuario(int codigoUsuario, AlterarUsuarioRequestModel novosDadosUsuario)
+        {
+            if (novosDadosUsuario.Email != null)
+            {
+                var validarEmail = await ObterUsuario(novosDadosUsuario.Email);
+                if (validarEmail.Sucesso && validarEmail.Usuario.Codigo != codigoUsuario)
+                    return new AtualizarUsuarioServicoRespostaModel("Não foi possível salvar pois o novo email já é utilizado por outro usuário.");
+            }
+
+            var respostaObterUsuario = await ObterUsuario(codigoUsuario);
+            if (!respostaObterUsuario.Sucesso)
+                return new AtualizarUsuarioServicoRespostaModel("Usuário especificado não encontrado");                        
+
+            var usuario = respostaObterUsuario.Usuario;
+            var senha = string.IsNullOrEmpty(novosDadosUsuario.Senha) ? usuario.Senha : CifrarSenhaUsuario(novosDadosUsuario.Senha);
+            var usuarioDto = new UsuarioDto()
+            {
+                Codigo = usuario.Codigo,
+                Email = string.IsNullOrEmpty(novosDadosUsuario.Email) ? usuario.Email : novosDadosUsuario.Email,
+                Senha = senha,
+                Nome = string.IsNullOrEmpty(novosDadosUsuario.Nome) ? usuario.Nome : novosDadosUsuario.Nome,
+                Cpf = string.IsNullOrEmpty(novosDadosUsuario.Cpf) ? usuario.Cpf : novosDadosUsuario.Cpf,
+                NumeroTelefone = string.IsNullOrEmpty(novosDadosUsuario.NumeroTelefone) ? usuario.NumeroTelefone : novosDadosUsuario.NumeroTelefone,
+                BairroEndereco = string.IsNullOrEmpty(novosDadosUsuario.BairroEndereco) ? usuario.Endereco.Bairro : novosDadosUsuario.BairroEndereco,
+                CepEndereco = string.IsNullOrEmpty(novosDadosUsuario.CepEndereco) ? usuario.Endereco.Cep : novosDadosUsuario.CepEndereco,
+                ComplementoEndereco = string.IsNullOrEmpty(novosDadosUsuario.ComplementoEndereco) ? usuario.Endereco.Complemento : novosDadosUsuario.ComplementoEndereco,
+                LogradouroEndereco = string.IsNullOrEmpty(novosDadosUsuario.LogradouroEndereco) ? usuario.Endereco.Logradouro : novosDadosUsuario.LogradouroEndereco,
+                NumeroEndereco = string.IsNullOrEmpty(novosDadosUsuario.NumeroEndereco) ? usuario.Endereco.Numero : novosDadosUsuario.NumeroEndereco,
+                UfEndereco = string.IsNullOrEmpty(novosDadosUsuario.UfEndereco) ? usuario.Endereco.Uf : novosDadosUsuario.UfEndereco
+            };
+
+            await _usuarioRepositorio.AtualizarUsuario(usuarioDto);
+            return new AtualizarUsuarioServicoRespostaModel();
         }
 
         public async Task<AutenticarUsuarioRespostaModel> AutenticarUsuario(string emailLogin, string senhaLogin, string perfilLogin)
@@ -102,6 +138,7 @@ namespace Vrum.BFF.Servicos.Usuario
 
     public interface IUsuarioServico
     {
+        Task<AtualizarUsuarioServicoRespostaModel> AtualizarUsuario(int codigoUsuario, AlterarUsuarioRequestModel novosDadosUsuario);
         Task<CadastrarUsuarioServicoRespostaModel> CadastrarUsuario(UsuarioEntidade usuario);
         Task<ObterUsuarioServicoRespostaModel> ObterUsuario(string emailUsuario);
         Task<ObterUsuarioServicoRespostaModel> ObterUsuario(int codigoUsuario);

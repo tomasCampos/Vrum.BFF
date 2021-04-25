@@ -121,12 +121,12 @@ namespace Vrum.BFF.Controllers
             });
         }
 
-        [HttpPatch("{codigoCarro}")]
+        [HttpPatch("{codigo}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AtualizarCarro([FromRoute] int codigoCarro, [FromBody] AlterarCarroRequestModel requisicao)
+        public async Task<IActionResult> AtualizarCarro([FromRoute] int codigo, [FromBody] AlterarCarroRequestModel requisicao)
         {
-            var resultadoAtualizacao = await _carroServico.Atualizarcarro(codigoCarro, requisicao);
+            var resultadoAtualizacao = await _carroServico.Atualizarcarro(codigo, requisicao);
 
             if (!resultadoAtualizacao.Sucesso)
             {

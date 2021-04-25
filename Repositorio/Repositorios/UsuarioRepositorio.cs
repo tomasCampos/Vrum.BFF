@@ -19,6 +19,7 @@ namespace Repositorio.Repositorios
         {
             await _dataBase.ExecutarAsync(AppConstants.SQL_ATUALIZAR_USUARIO, new 
             {
+                id_usuario = usuario.Codigo,
                 email_usuario = usuario.Email,
                 senha_usuario = usuario.Senha,
                 nome_usuario = usuario.Nome,

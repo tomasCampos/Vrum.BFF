@@ -123,5 +123,40 @@ namespace Vrum.BFF.Controllers
                 Corpo = resultadoAutenticacao.UsuarioLogado
             });
         }
+
+        [HttpPatch("{codigo}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AtualizarUsuario([FromRoute] int codigo, [FromBody] AlterarUsuarioRequestModel requisicao)
+        {
+            var validacao = requisicao.Validar();
+            if (!validacao.Valido)
+            {
+                return BadRequest(new HttpResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Sucesso = false,
+                    Mensagem = validacao.MensagemDeErro
+                });
+            }
+
+            var resultadoAtualizacao = await _usuarioServico.AtualizarUsuario(codigo, requisicao);
+
+            if (!resultadoAtualizacao.Sucesso)
+            {
+                return BadRequest(new HttpResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Sucesso = false,
+                    Mensagem = resultadoAtualizacao.Mensagem
+                });
+            }
+
+            return Ok(new HttpResponseModel
+            {
+                Sucesso = true,
+                StatusCode = System.Net.HttpStatusCode.OK
+            });
+        }
     }
 }
