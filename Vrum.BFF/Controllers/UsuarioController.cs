@@ -18,12 +18,12 @@ namespace Vrum.BFF.Controllers
             _usuarioServico = usuarioServico;
         }
 
-        [HttpGet("{emailUsuario}")]
+        [HttpGet("{codigo}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> ObterUsuario([FromRoute] string emailUsuario)
+        public async Task<IActionResult> ObterUsuario([FromRoute] int codigo)
         {
-            var respostaServico = await _usuarioServico.ObterUsuario(emailUsuario);
+            var respostaServico = await _usuarioServico.ObterUsuario(codigo);
 
             if (!respostaServico.Sucesso)
             {
