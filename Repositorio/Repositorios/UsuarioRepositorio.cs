@@ -15,6 +15,24 @@ namespace Repositorio.Repositorios
             _dataBase = new DataBaseConnector();
         }
 
+        public async Task AtualizarUsuario(UsuarioDto usuario)
+        {
+            await _dataBase.ExecutarAsync(AppConstants.SQL_ATUALIZAR_USUARIO, new 
+            {
+                email_usuario = usuario.Email,
+                senha_usuario = usuario.Senha,
+                nome_usuario = usuario.Nome,
+                cpf_usuario = usuario.Cpf,
+                telefone_usuario = usuario.NumeroTelefone,
+                bairro_endereco = usuario.BairroEndereco,
+                cep_endereco = usuario.CepEndereco,
+                complemento_endereco = usuario.ComplementoEndereco,
+                logradouro_endereco = usuario.LogradouroEndereco,
+                numero_endereco = usuario.NumeroEndereco,
+                uf_endereco = usuario.UfEndereco
+            });
+        }
+
         public async Task CadastrarUsuario(UsuarioDto usuario)
         {
             await CadastrarEnderecoDoUsuario(usuario.ChaveIdentificacaoEndereco, usuario.CepEndereco, usuario.BairroEndereco, usuario.ComplementoEndereco,
@@ -69,5 +87,6 @@ namespace Repositorio.Repositorios
         Task CadastrarUsuario(UsuarioDto usuario);
         Task<UsuarioDto> ObterUsuario(string emailUsuario);
         Task<UsuarioDto> ObterUsuario(int codigoUsuario);
+        Task AtualizarUsuario(UsuarioDto usuario);
     }
 }

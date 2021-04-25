@@ -69,6 +69,25 @@
                                                     @perfil_usuario,
                                                     @id_endereco);";
 
+        public const string SQL_ATUALIZAR_USUARIO = @"UPDATE 
+	                                                    usuario,
+                                                        endereco
+                                                    INNER JOIN endereco ON
+	                                                    usuario.id_endereco = endereco.id_endereco
+                                                    SET
+                                                        usuario.email_usuario = @email_usuario,
+                                                        usuario.senha_usuario = @senha_usuario,
+                                                        usuario.nome_usuario = @nome_usuario,
+                                                        usuario.cpf_usuario = @cpf_usuario,
+                                                        usuario.telefone_usuario = @telefone_usuario,
+                                                        endereco.bairro_endereco = @bairro_endereco,
+                                                        endereco.cep_endereco = @cep_endereco,
+                                                        endereco.complemento_endereco = @complemento_endereco,
+                                                        endereco.logradouro_endereco = @logradouro_endereco,
+                                                        endereco.numero_endereco = @numero_endereco,
+                                                        endereco.uf_endereco = @uf_endereco
+                                                  WHERE `id_usuario` = @id_usuario";
+
         #endregion
 
         #region ENDERECO_SQL
