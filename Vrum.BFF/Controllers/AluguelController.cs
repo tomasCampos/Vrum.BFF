@@ -44,7 +44,7 @@ namespace Vrum.BFF.Controllers
 
             if (!resultado.Sucesso)
             {
-                return BadRequest(new HttpResponseModel 
+                return BadRequest(new HttpResponseModel
                 {
                     Sucesso = false,
                     StatusCode = System.Net.HttpStatusCode.BadRequest,
@@ -52,7 +52,7 @@ namespace Vrum.BFF.Controllers
                 });
             }
 
-            return Created("/Alugueis", new HttpResponseModel() 
+            return Created("/Alugueis", new HttpResponseModel()
             {
                 Sucesso = true,
                 StatusCode = System.Net.HttpStatusCode.Created,
@@ -69,7 +69,7 @@ namespace Vrum.BFF.Controllers
 
             if (aluguel == null)
             {
-                return NotFound(new HttpResponseModel 
+                return NotFound(new HttpResponseModel
                 {
                     Sucesso = false,
                     StatusCode = System.Net.HttpStatusCode.NotFound,
@@ -77,7 +77,7 @@ namespace Vrum.BFF.Controllers
                 });
             }
 
-            return Ok(new HttpResponseModel 
+            return Ok(new HttpResponseModel
             {
                 Sucesso = true,
                 StatusCode = System.Net.HttpStatusCode.OK,
@@ -94,7 +94,7 @@ namespace Vrum.BFF.Controllers
             {
                 if (!Enum.TryParse<AluguelEntidade.SituacaoAluguel>(situacao, out _))
                 {
-                    return BadRequest(new HttpResponseModel 
+                    return BadRequest(new HttpResponseModel
                     {
                         Sucesso = false,
                         StatusCode = System.Net.HttpStatusCode.BadRequest,
@@ -110,6 +110,41 @@ namespace Vrum.BFF.Controllers
                 Sucesso = true,
                 StatusCode = System.Net.HttpStatusCode.OK,
                 Corpo = alugueis
+            });
+        }
+
+        [HttpPatch("{codigo}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AtualizarAluguel([FromRoute] int codigo, [FromBody] AlterarAluguelRequestModel requisicao)
+        {
+            var validacao = requisicao.Validar();
+            if (!validacao.Valido)
+            {
+                return BadRequest(new HttpResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Sucesso = false,
+                    Mensagem = validacao.MensagemDeErro
+                });
+            }
+
+            var resultadoAlteracao = await _aluguelServico.AtualizarAluguel(codigo, requisicao);
+
+            if (!resultadoAlteracao.Sucesso)
+            {
+                return BadRequest(new HttpResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Sucesso = false,
+                    Mensagem = resultadoAlteracao.Mensagem
+                });
+            }
+
+            return Ok(new HttpResponseModel
+            {
+                Sucesso = true,
+                StatusCode = System.Net.HttpStatusCode.OK
             });
         }
     }

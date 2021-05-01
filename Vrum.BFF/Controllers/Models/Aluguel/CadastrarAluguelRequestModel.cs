@@ -22,7 +22,11 @@ namespace Vrum.BFF.Controllers.Models.Aluguel
             if (DataFimReserva == null)
                 erros.Add("O campo data final da reserva deve ser preenchido");
             if (DataFimReserva != null && DataInicioReserva != null && DataFimReserva <= DataInicioReserva)
-                erros.Add("A data final da reserva deve ser superior à data inicial da reserva");
+                erros.Add("A data final da reserva deve ser superior à data inicial da reserva");            
+            if (DataInicioReserva != null && DataInicioReserva < DateTime.Now)
+                erros.Add("A data inicial da reserva não pode ser anterior à data atual");
+            if (DataFimReserva != null && DataFimReserva < DateTime.Now)
+                erros.Add("A data final da reserva não pode ser anterior à data atual");
             if (CodigoCarroQueSeraAlugado <= 0)
                 erros.Add("O código do carro informado está inválido");
             if (CodigoUsuarioLocatario <= 0)

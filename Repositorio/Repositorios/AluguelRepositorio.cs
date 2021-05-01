@@ -1,6 +1,7 @@
 ﻿using Repositorio.Constantes;
 using Repositorio.Dtos;
 using Repositorio.Infraestrutura;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,20 @@ namespace Repositorio.Repositorios
         public AluguelRepositorio()
         {
             _dataBase = new DataBaseConnector();
+        }
+
+        public async Task AtualizarAluguel(int codigoAluguel, DateTime dataInicioReserva, DateTime dataFimReserva, DateTime dataDevolucaoCarro, int codigoSituacao, double precoTotal, int codigoCarro)
+        {
+            await _dataBase.ExecutarAsync(AppConstants.SQL_ATUALIZAR_ALUGUEL, new 
+            {
+                data_ini_reserva_aluguel = dataInicioReserva,
+                data_fim_reserva_aluguel = dataFimReserva,
+                data_devolucao_carro_aluguel = dataDevolucaoCarro,
+                situacao_aluguel = codigoSituacao,
+                preco_total_aluguel = precoTotal,
+                id_carro = codigoCarro,
+                id_aluguel = codigoAluguel
+            });
         }
 
         public async Task CadastrarAluguel(AluguelDto aluguel)
@@ -70,5 +85,6 @@ namespace Repositorio.Repositorios
         Task<List<AluguelDto>> ListarAlugueis(int? codigoUsuarioLocador = null, int? codigoUsuarioLocatario = null, int? codigoSituacao = null);
         Task<AluguelDto> ObterAluguel(string chaveIdentificacaoReserva);
         Task<AluguelDto> ObterAluguel(int codigoAluguel);
+        Task AtualizarAluguel(int codigoAluguel, DateTime dataInicioReserva, DateTime dataFimReserva, DateTime dataDevolucaoCarro, int codigoSituacao, double precoTotal, int codigoCarro);
     }
 }

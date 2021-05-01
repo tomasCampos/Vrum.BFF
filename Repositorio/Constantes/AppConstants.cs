@@ -248,6 +248,16 @@
                                                 WHERE 1 = 1
                                                 {0}";
 
+        public const string SQL_ATUALIZAR_ALUGUEL = @"UPDATE aluguel
+                                                    SET
+                                                    data_ini_reserva_aluguel = @data_ini_reserva_aluguel,
+                                                    data_fim_reserva_aluguel = @data_fim_reserva_aluguel,
+                                                    data_devolucao_carro_aluguel = @data_devolucao_carro_aluguel,
+                                                    situacao_aluguel = @situacao_aluguel,
+                                                    preco_total_aluguel = @preco_total_aluguel,
+                                                    id_carro = @id_carro
+                                                    WHERE id_aluguel = @id_aluguel";
+
         #endregion
     }
 }
