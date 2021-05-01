@@ -52,12 +52,14 @@ namespace Vrum.BFF.Entidades
         public string Cpf { get; set; }
         public string NumeroTelefone { get; set; }
         public EnderecoEntidade Endereco { get; set; }
-        public string Perfil { 
-        get 
-        {
-            var a = (PerfilUsuario)this.CodigoPerfil;
-            return a.ToString();
-        }
+
+        public string Perfil 
+        { 
+            get 
+            {
+                var a = (PerfilUsuario)this.CodigoPerfil;
+                return a.ToString();
+            }
             private set {}
         }
 
