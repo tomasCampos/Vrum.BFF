@@ -205,5 +205,59 @@
         public const string SQL_DELETAR_CARRO = "DELETE FROM carro WHERE carro.id_carro = @id_carro";
 
         #endregion
+
+        #region ALUGUEL_SQL
+
+        public const string SQL_CADASTRAR_ALUGUEL = @"INSERT INTO `aluguel`
+                                                    (`chave_reserva_aluguel`,
+                                                    `data_ini_reserva_aluguel`,
+                                                    `data_fim_reserva_aluguel`,
+                                                    `preco_total_aluguel`,
+                                                    `id_usuario`,
+                                                    `id_carro`)
+                                                    VALUES
+                                                    (@chave_reserva_aluguel,
+                                                    @data_ini_reserva_aluguel,
+                                                    @data_fim_reserva_aluguel,
+                                                    @preco_total_aluguel,
+                                                    @id_usuario,
+                                                    @id_carro)";
+
+        public const string SQL_LISTAR_ALUGUEL = @"SELECT 
+	                                                a.id_aluguel AS Codigo,
+                                                    a.chave_reserva_aluguel AS ChaveIdentificacaoReserva,
+                                                    a.data_ini_reserva_aluguel AS DataInicioReserva,
+                                                    a.data_fim_reserva_aluguel AS DataFimReserva,
+                                                    a.data_devolucao_carro_aluguel AS DataDevolucaoCarro,
+                                                    a.situacao_aluguel AS Situacao,
+                                                    a.preco_total_aluguel AS PrecoTotal,
+                                                    u.id_usuario AS CodigoUsuarioLocatario,
+                                                    u.nome_usuario AS NomeUsuarioLocatario,
+                                                    u.cpf_usuario AS CpfUsuarioLocatario,
+                                                    u.email_usuario AS EmailUsuarioLocatario,
+                                                    u.telefone_usuario AS NumeroTelefoneUsuarioLocatario,
+                                                    c.id_carro AS CodigoCarroAlugado,
+                                                    c.placa_carro AS PlacaCarroAlugado,
+                                                    c.marca_carro AS MarcaCarroAlugado,
+                                                    c.numero_assentos_carro AS NumeroDeAssentosCarroAlugado,
+                                                    c.preco_diaria_carro AS PrecoDaDiariaCarroAlugado,
+                                                    c.id_usuario AS CodigoUsuarioLocador
+                                                FROM aluguel a
+                                                INNER JOIN usuario u ON a.id_usuario = u.id_usuario
+                                                INNER JOIN carro c ON a.id_carro = c.id_carro
+                                                WHERE 1 = 1
+                                                {0}";
+
+        public const string SQL_ATUALIZAR_ALUGUEL = @"UPDATE aluguel
+                                                    SET
+                                                    data_ini_reserva_aluguel = @data_ini_reserva_aluguel,
+                                                    data_fim_reserva_aluguel = @data_fim_reserva_aluguel,
+                                                    data_devolucao_carro_aluguel = @data_devolucao_carro_aluguel,
+                                                    situacao_aluguel = @situacao_aluguel,
+                                                    preco_total_aluguel = @preco_total_aluguel,
+                                                    id_carro = @id_carro
+                                                    WHERE id_aluguel = @id_aluguel";
+
+        #endregion
     }
 }
