@@ -170,6 +170,37 @@ namespace Vrum.BFF.Servicos.Aluguel
             var aluguel = new AluguelEntidade(dto);
             return aluguel;
         }
+
+        public async Task<ObterResumoAlugueisUsuarioServicoResponseModel> ObterResumoAluguelUsuario(int codigoUsuario)
+        {
+            var usuario = await _usuarioServico.ObterUsuario(codigoUsuario);
+
+            if (!usuario.Sucesso)
+                return new ObterResumoAlugueisUsuarioServicoResponseModel("Usuario não encontrado");
+
+            if (usuario.Usuario.Perfil == "LOCADOR")
+            {
+                var listaAlugueis = await _aluguelRepositorio.ListarAlugueis(codigoUsuario);
+
+                var alugueisPendentes = listaAlugueis.Count(a => a.Situacao == 0);
+                var alugueisEmAndamento = listaAlugueis.Count(a => a.Situacao == 1);
+                var alugueisRejeitados = listaAlugueis.Count(a => a.Situacao == 2);
+                var alugueisFinalizados = listaAlugueis.Count(a => a.Situacao == 3);
+
+                return new ObterResumoAlugueisUsuarioServicoResponseModel(alugueisPendentes, alugueisEmAndamento, alugueisRejeitados, alugueisFinalizados);
+            }
+            else
+            {
+                var listaAlugueis = await _aluguelRepositorio.ListarAlugueis(null, codigoUsuario);
+
+                var alugueisPendentes = listaAlugueis.Count(a => a.Situacao == 0);
+                var alugueisEmAndamento = listaAlugueis.Count(a => a.Situacao == 1);
+                var alugueisRejeitados = listaAlugueis.Count(a => a.Situacao == 2);
+                var alugueisFinalizados = listaAlugueis.Count(a => a.Situacao == 3);
+
+                return new ObterResumoAlugueisUsuarioServicoResponseModel(alugueisPendentes, alugueisEmAndamento, alugueisRejeitados, alugueisFinalizados);
+            }
+        }
     }
 
     public interface IAluguelServico
@@ -179,5 +210,6 @@ namespace Vrum.BFF.Servicos.Aluguel
         Task<AluguelEntidade> ObterAluguel(string chaveIdentificacaoReserva);
         Task<AluguelEntidade> ObterAluguel(int codigoAluguel);
         Task<AtualizarAluguelServicoResponseModel> AtualizarAluguel(int codigoAluguel, AlterarAluguelRequestModel requisicao);
+        Task<ObterResumoAlugueisUsuarioServicoResponseModel> ObterResumoAluguelUsuario(int codigoUsuario);
     }
 }

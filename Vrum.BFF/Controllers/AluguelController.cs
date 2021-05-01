@@ -113,6 +113,47 @@ namespace Vrum.BFF.Controllers
             });
         }
 
+        [HttpGet("resumo/{codigoUsuario}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ObterResumoAlugueisUsuario([FromRoute] int codigoUsuario)
+        {
+            if(codigoUsuario <= 0)
+            {
+                return BadRequest(new HttpResponseModel 
+                {
+                    Sucesso = false,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Mensagem = "Código de usuário inválido"
+                });
+            }
+
+            var resultado = await _aluguelServico.ObterResumoAluguelUsuario(codigoUsuario);
+
+            if (!resultado.Sucesso)
+            {
+                return BadRequest(new HttpResponseModel 
+                {
+                    Sucesso = false,
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Mensagem = resultado.Mensagem
+                });
+            }
+
+            return Ok(new HttpResponseModel 
+            {
+                Sucesso = true,
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Corpo = new
+                {
+                    resultado.QuantidadeDeAlugueisPendentes,
+                    resultado.QuantidadeDeAlugueisEmAndamento,
+                    resultado.QuantidadeDeAlugueisRejeitados,
+                    resultado.QuantidadeDeAlugueisFinalizados
+                }
+            });
+        }
+
         [HttpPatch("{codigo}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -147,5 +188,6 @@ namespace Vrum.BFF.Controllers
                 StatusCode = System.Net.HttpStatusCode.OK
             });
         }
+
     }
 }
