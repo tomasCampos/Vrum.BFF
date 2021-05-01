@@ -22,6 +22,7 @@ namespace Vrum.BFF.Entidades
             DataDevolucaoCarro = aluguelDto.DataDevolucaoCarro;
             CodigoSituacao = aluguelDto.Situacao;
             CodigoUsuarioLocador = aluguelDto.CodigoUsuarioLocador;
+            PrecoTotal = aluguelDto.PrecoTotal;
 
             UsuarioLocatario = new Locatario
             {
@@ -46,7 +47,7 @@ namespace Vrum.BFF.Entidades
         public string ChaveIdentificacaoReserva { get; set; }
         public DateTime DataInicioReserva { get; set; }
         public DateTime DataFimReserva { get; set; }
-        public DateTime DataDevolucaoCarro { get; set; }
+        public DateTime? DataDevolucaoCarro { get; set; }
 
         public string Situacao
         {

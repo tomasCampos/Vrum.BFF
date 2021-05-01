@@ -32,63 +32,66 @@ namespace Vrum.BFF.Servicos.Aluguel
             if (aluguel == null)
                 return new AtualizarAluguelServicoResponseModel("Aluguel informado não existe.", AtualizarAluguelServicoResponseModel.FalhasPossiveis.ALUGUEL_NAO_EXISTE);
 
-            double novoPrecoDiaria;
-            if (requisicao.CodigoCarroQueSeraAlugado.HasValue)
+            if (!string.IsNullOrEmpty(requisicao.Situacao) && !Enum.TryParse<SituacaoAluguel>(requisicao.Situacao, out _))
             {
-                var resultado = await _carroServico.ObterCarro(requisicao.CodigoCarroQueSeraAlugado.Value);
-
-                if (!resultado.Sucesso)
-                    return new AtualizarAluguelServicoResponseModel("Carro informado não existe.", AtualizarAluguelServicoResponseModel.FalhasPossiveis.CARRO_NAO_EXISTE);
-
-                novoPrecoDiaria = resultado.Carro.PrecoDaDiaria;
-            }
-            else
-            {
-                novoPrecoDiaria = aluguel.PrecoDaDiariaCarroAlugado;
+                return new AtualizarAluguelServicoResponseModel("O campo situação deve ser uma das: PENDENTE, EM_ANDAMENTO, REJEITADO, FINALIZADO.", 
+                    AtualizarAluguelServicoResponseModel.FalhasPossiveis.SITUACAO_INVALIDA);
             }
 
-            if (requisicao.DataDeDevolucaoDoCarro != null && requisicao.DataDeDevolucaoDoCarro < aluguel.DataInicioReserva)
+            if (aluguel.Situacao > 0 && requisicao.DataInicioReserva.HasValue)
             {
-                return new AtualizarAluguelServicoResponseModel("A data de devolução do carro não pode ser menor que a data de início da reserva.",
-                    AtualizarAluguelServicoResponseModel.FalhasPossiveis.DATAS_INVALIDAS);
-            }
-            if (requisicao.DataFimReserva != null && requisicao.DataFimReserva < aluguel.DataInicioReserva)
-            {
-                return new AtualizarAluguelServicoResponseModel("A data de fim da reserva não pode ser menor que a data de início da reserva.",
+                return new AtualizarAluguelServicoResponseModel("Não é possível alterar a data de início do aluguel depois do carro ja ter sido retirado",
                     AtualizarAluguelServicoResponseModel.FalhasPossiveis.DATAS_INVALIDAS);
             }
 
-            int codigoSituacao = 0;
-            if (!string.IsNullOrEmpty(requisicao.Situacao))
+            if (aluguel.Situacao > 0 && requisicao.CodigoCarroQueSeraAlugado.HasValue)
             {
-                SituacaoAluguel situacaoAlteracaoAluguel;
-                if (!Enum.TryParse<SituacaoAluguel>(requisicao.Situacao, out situacaoAlteracaoAluguel))
-                {
-                    return new AtualizarAluguelServicoResponseModel("O campo situação deve ser uma das: PENDENTE, EM_ANDAMENTO, REJEITADO, FINALIZADO", 
-                        AtualizarAluguelServicoResponseModel.FalhasPossiveis.SITUACAO_INVALIDA);
-                }
-                codigoSituacao = (int)situacaoAlteracaoAluguel;
-                if (codigoSituacao < aluguel.Situacao)
-                {
-                    return new AtualizarAluguelServicoResponseModel("A situação de um aluguel não pode retroceder",
-                        AtualizarAluguelServicoResponseModel.FalhasPossiveis.RETROCEDENDO_SITUACOES);
-                }
+                return new AtualizarAluguelServicoResponseModel("Não é possível trocar o carro alugado depois do aluguel ja ter sido aceito pelo locador",
+                    AtualizarAluguelServicoResponseModel.FalhasPossiveis.SITUACAO_INVALIDA);
             }
 
-            var novaDataInicioReserva = requisicao.DataInicioReserva == null ? aluguel.DataInicioReserva : requisicao.DataInicioReserva;
-            var novaDataFimReserva = requisicao.DataFimReserva == null ? aluguel.DataFimReserva : requisicao.DataFimReserva;
-            var novoCodigoDoCarro = !requisicao.CodigoCarroQueSeraAlugado.HasValue ? aluguel.CodigoCarroAlugado : requisicao.CodigoCarroQueSeraAlugado;
-            var novoCodigoSituacao = string.IsNullOrEmpty(requisicao.Situacao) ? aluguel.Situacao : codigoSituacao;
 
-            if (novoCodigoSituacao == 4 && requisicao.DataDeDevolucaoDoCarro == null)
+            var novaDataInicioReserva = requisicao.DataInicioReserva.HasValue ? requisicao.DataInicioReserva.Value : aluguel.DataInicioReserva;
+            var novaDataFimReserva = requisicao.DataFimReserva.HasValue ? requisicao.DataFimReserva.Value : aluguel.DataFimReserva;
+            var novoCodigoCarroAlugado = requisicao.CodigoCarroQueSeraAlugado.HasValue ? requisicao.CodigoCarroQueSeraAlugado.Value : aluguel.CodigoCarroAlugado;
+            var novaDataDevolucao = requisicao.DataDeDevolucaoDoCarro.HasValue ? requisicao.DataDeDevolucaoDoCarro : aluguel.DataDevolucaoCarro;
+            var novoCodigoSituacao = !string.IsNullOrEmpty(requisicao.Situacao) ? (int)Enum.Parse<AluguelEntidade.SituacaoAluguel>(requisicao.Situacao) : aluguel.Situacao;
+
+            if (aluguel.Situacao == 1 && novoCodigoSituacao == 2)
             {
-                return new AtualizarAluguelServicoResponseModel("Para encerrar o aluguel é necessário informar a data de devolução do carro", AtualizarAluguelServicoResponseModel.FalhasPossiveis.DATAS_INVALIDAS);
+                return new AtualizarAluguelServicoResponseModel("Um aluguel que já está em andamento não pode ser rejeitado, apenas finalizado.",
+                    AtualizarAluguelServicoResponseModel.FalhasPossiveis.SITUACAO_INVALIDA);
             }
 
-            var novaDataDevolucao = requisicao.DataDeDevolucaoDoCarro == null ? aluguel.DataDevolucaoCarro : requisicao.DataDeDevolucaoDoCarro;
-            var novoPrecoTotal = novoPrecoDiaria * (novaDataInicioReserva - novaDataFimReserva).TotalDays;
+            if (aluguel.Situacao != 1 && novoCodigoSituacao == 3)
+            {
+                return new AtualizarAluguelServicoResponseModel("Apenas alugueis em andamento podem ser finalizados.",
+                    AtualizarAluguelServicoResponseModel.FalhasPossiveis.SITUACAO_INVALIDA);
+            }
 
-            await _aluguelRepositorio.AtualizarAluguel(codigoAluguel, novaDataInicioReserva, novaDataFimReserva, novaDataDevolucao, novoCodigoSituacao, novoPrecoTotal, codigoAluguel);
+            if (novoCodigoSituacao < aluguel.Situacao)
+                return new AtualizarAluguelServicoResponseModel("As situações não podem retroceder.", AtualizarAluguelServicoResponseModel.FalhasPossiveis.SITUACAO_INVALIDA);
+
+            if (novoCodigoSituacao == 3 && !novaDataDevolucao.HasValue)
+            {
+                return new AtualizarAluguelServicoResponseModel("Para que o aluguel seja encerrado é preciso informar a data de devolução do carro.",
+                    AtualizarAluguelServicoResponseModel.FalhasPossiveis.DATAS_INVALIDAS);
+            }
+
+            if (novaDataDevolucao.HasValue && novoCodigoSituacao != 3)
+            {
+                return new AtualizarAluguelServicoResponseModel("Se o carro foi devolvido, a situacao do aluguel deve ser FINALIZADO",
+                    AtualizarAluguelServicoResponseModel.FalhasPossiveis.SITUACAO_INVALIDA);
+            }
+
+            var novoCarro = await _carroServico.ObterCarro(novoCodigoCarroAlugado);
+            if (!novoCarro.Sucesso)
+                return new AtualizarAluguelServicoResponseModel("Carro não encontrado.", AtualizarAluguelServicoResponseModel.FalhasPossiveis.CARRO_NAO_EXISTE);
+
+            var novoPrecoAluguel = novoCarro.Carro.PrecoDaDiaria * 
+                (novaDataDevolucao.HasValue ? novaDataDevolucao.Value - novaDataInicioReserva : novaDataFimReserva - novaDataInicioReserva).TotalDays;
+
+            await _aluguelRepositorio.AtualizarAluguel(codigoAluguel, novaDataInicioReserva, novaDataFimReserva, novaDataDevolucao, novoCodigoSituacao, novoPrecoAluguel, novoCodigoCarroAlugado);
             return new AtualizarAluguelServicoResponseModel();
         }
 

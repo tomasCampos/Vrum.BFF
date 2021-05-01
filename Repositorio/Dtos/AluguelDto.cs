@@ -10,7 +10,7 @@ namespace Repositorio.Dtos
         public string ChaveIdentificacaoReserva { get; set; }
         public DateTime DataInicioReserva { get; set; }
         public DateTime DataFimReserva { get; set; }
-        public DateTime DataDevolucaoCarro { get; set; }
+        public DateTime? DataDevolucaoCarro { get; set; }
         public int Situacao { get; set; }
         public double PrecoTotal { get; set; }
         public int CodigoUsuarioLocatario { get; set; }

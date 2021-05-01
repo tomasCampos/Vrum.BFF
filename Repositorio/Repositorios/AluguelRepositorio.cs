@@ -16,7 +16,7 @@ namespace Repositorio.Repositorios
             _dataBase = new DataBaseConnector();
         }
 
-        public async Task AtualizarAluguel(int codigoAluguel, DateTime dataInicioReserva, DateTime dataFimReserva, DateTime dataDevolucaoCarro, int codigoSituacao, double precoTotal, int codigoCarro)
+        public async Task AtualizarAluguel(int codigoAluguel, DateTime dataInicioReserva, DateTime dataFimReserva, DateTime? dataDevolucaoCarro, int codigoSituacao, double precoTotal, int codigoCarro)
         {
             await _dataBase.ExecutarAsync(AppConstants.SQL_ATUALIZAR_ALUGUEL, new 
             {
@@ -85,6 +85,6 @@ namespace Repositorio.Repositorios
         Task<List<AluguelDto>> ListarAlugueis(int? codigoUsuarioLocador = null, int? codigoUsuarioLocatario = null, int? codigoSituacao = null);
         Task<AluguelDto> ObterAluguel(string chaveIdentificacaoReserva);
         Task<AluguelDto> ObterAluguel(int codigoAluguel);
-        Task AtualizarAluguel(int codigoAluguel, DateTime dataInicioReserva, DateTime dataFimReserva, DateTime dataDevolucaoCarro, int codigoSituacao, double precoTotal, int codigoCarro);
+        Task AtualizarAluguel(int codigoAluguel, DateTime dataInicioReserva, DateTime dataFimReserva, DateTime? dataDevolucaoCarro, int codigoSituacao, double precoTotal, int codigoCarro);
     }
 }
