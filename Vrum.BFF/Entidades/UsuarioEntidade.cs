@@ -37,6 +37,7 @@ namespace Vrum.BFF.Entidades
                     ChaveIdentificacao = usuarioDto.ChaveIdentificacaoEndereco,
                     Bairro = usuarioDto.BairroEndereco,
                     Cep = usuarioDto.CepEndereco,
+                    Localidade = usuarioDto.LocalidadeEndereco,
                     Complemento = usuarioDto.ComplementoEndereco,
                     Logradouro = usuarioDto.LogradouroEndereco,
                     Numero = usuarioDto.NumeroEndereco,

@@ -13,6 +13,7 @@ namespace Vrum.BFF.Controllers.Models.Usuario
         public string Cpf { get; set; }
         public string NumeroTelefone { get; set; }
         public string CepEndereco { get; set; }
+        public string LocalidadeEndereco { get; set; }
         public string LogradouroEndereco { get; set; }
         public string NumeroEndereco { get; set; }
         public string ComplementoEndereco { get; set; }

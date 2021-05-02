@@ -14,6 +14,7 @@ namespace Repositorio.Dtos
         public int? CodigoEndereco { get; set; }
         public string ChaveIdentificacaoEndereco { get; set; }
         public string CepEndereco { get; set; }
+        public string LocalidadeEndereco { get; set; }
         public string LogradouroEndereco { get; set; }
         public string NumeroEndereco { get; set; }
         public string ComplementoEndereco { get; set; }
