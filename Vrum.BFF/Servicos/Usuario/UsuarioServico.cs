@@ -47,7 +47,8 @@ namespace Vrum.BFF.Servicos.Usuario
                 ComplementoEndereco = string.IsNullOrEmpty(novosDadosUsuario.ComplementoEndereco) ? usuario.Endereco.Complemento : novosDadosUsuario.ComplementoEndereco,
                 LogradouroEndereco = string.IsNullOrEmpty(novosDadosUsuario.LogradouroEndereco) ? usuario.Endereco.Logradouro : novosDadosUsuario.LogradouroEndereco,
                 NumeroEndereco = string.IsNullOrEmpty(novosDadosUsuario.NumeroEndereco) ? usuario.Endereco.Numero : novosDadosUsuario.NumeroEndereco,
-                UfEndereco = string.IsNullOrEmpty(novosDadosUsuario.UfEndereco) ? usuario.Endereco.Uf : novosDadosUsuario.UfEndereco
+                UfEndereco = string.IsNullOrEmpty(novosDadosUsuario.UfEndereco) ? usuario.Endereco.Uf : novosDadosUsuario.UfEndereco,
+                LocalidadeEndereco = string.IsNullOrEmpty(novosDadosUsuario.LocalidadeEndereco) ? usuario.Endereco.Localidade : novosDadosUsuario.LocalidadeEndereco
             };
 
             await _usuarioRepositorio.AtualizarUsuario(usuarioDto);
@@ -96,7 +97,8 @@ namespace Vrum.BFF.Servicos.Usuario
                 ComplementoEndereco = usuario.Endereco?.Complemento,
                 LogradouroEndereco = usuario.Endereco?.Logradouro,
                 NumeroEndereco = usuario.Endereco?.Numero,
-                UfEndereco = usuario.Endereco?.Uf                
+                UfEndereco = usuario.Endereco?.Uf,
+                LocalidadeEndereco = usuario.Endereco?.Localidade
             };
 
             await _usuarioRepositorio.CadastrarUsuario(usuarioDto);

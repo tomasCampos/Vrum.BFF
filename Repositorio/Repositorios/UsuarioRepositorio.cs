@@ -30,14 +30,15 @@ namespace Repositorio.Repositorios
                 complemento_endereco = usuario.ComplementoEndereco,
                 logradouro_endereco = usuario.LogradouroEndereco,
                 numero_endereco = usuario.NumeroEndereco,
-                uf_endereco = usuario.UfEndereco
+                uf_endereco = usuario.UfEndereco,
+                localidade_endereco = usuario.LocalidadeEndereco
             });
         }
 
         public async Task CadastrarUsuario(UsuarioDto usuario)
         {
             await CadastrarEnderecoDoUsuario(usuario.ChaveIdentificacaoEndereco, usuario.CepEndereco, usuario.BairroEndereco, usuario.ComplementoEndereco,
-                usuario.LogradouroEndereco, usuario.NumeroEndereco, usuario.UfEndereco);
+                usuario.LogradouroEndereco, usuario.NumeroEndereco, usuario.UfEndereco, usuario.LocalidadeEndereco);
 
             var codigoEndereco = await ObterCodigoDoEndereco(usuario.ChaveIdentificacaoEndereco);
 
@@ -60,7 +61,7 @@ namespace Repositorio.Repositorios
 
         #region METODOS PRIVADOS
 
-        private async Task CadastrarEnderecoDoUsuario(string chave, string cep, string bairro, string complemento, string logradouro, string numero, string uf)
+        private async Task CadastrarEnderecoDoUsuario(string chave, string cep, string bairro, string complemento, string logradouro, string numero, string uf, string localidade)
         {
             await _dataBase.ExecutarAsync(AppConstants.SQL_CADASTRAR_ENDERECO, new 
             { 
@@ -70,7 +71,8 @@ namespace Repositorio.Repositorios
                 numero_endereco = numero,
                 complemento_endereco = complemento,
                 bairro_endereco = bairro,
-                uf_endereco = uf
+                uf_endereco = uf,
+                localidade_endereco = localidade
             });
         }
 

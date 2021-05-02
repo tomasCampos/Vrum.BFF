@@ -43,6 +43,7 @@
                                                             e.id_endereco AS CodigoEndereco,
                                                             e.chave_endereco AS ChaveIdentificacaoEndereco,
                                                             e.cep_endereco AS CepEndereco,
+                                                            e.localidade_endereco AS LocalidadeEndereco,
                                                             e.logradouro_endereco AS LogradouroEndereco,
                                                             e.numero_endereco AS NumeroEndereco,
                                                             e.complemento_endereco AS ComplementoEndereco,
@@ -84,7 +85,8 @@
                                                         endereco.complemento_endereco = @complemento_endereco,
                                                         endereco.logradouro_endereco = @logradouro_endereco,
                                                         endereco.numero_endereco = @numero_endereco,
-                                                        endereco.uf_endereco = @uf_endereco
+                                                        endereco.uf_endereco = @uf_endereco,
+                                                        endereco.localidade_endereco = @localidade_endereco
                                                   WHERE usuario.id_usuario = @id_usuario";
 
         #endregion
@@ -98,7 +100,8 @@
                                                     `numero_endereco`,
                                                     `complemento_endereco`,
                                                     `bairro_endereco`,
-                                                    `uf_endereco`)
+                                                    `uf_endereco`,
+                                                    `localidade_endereco`)
                                                     VALUES
                                                     (@chave_endereco,
                                                     @cep_endereco,
@@ -106,7 +109,8 @@
                                                     @numero_endereco,
                                                     @complemento_endereco,
                                                     @bairro_endereco,
-                                                    @uf_endereco);";
+                                                    @uf_endereco,
+                                                    @localidade_endereco);";
 
         public const string SQL_OBTER_CODIGO_ENDERECO_POR_CHAVE = "SELECT id_endereco FROM `heroku_3dc1bcc8f5cdd12`.`endereco` WHERE chave_endereco = @chave_endereco";
 
@@ -239,6 +243,7 @@
                                                     c.id_carro AS CodigoCarroAlugado,
                                                     c.placa_carro AS PlacaCarroAlugado,
                                                     c.marca_carro AS MarcaCarroAlugado,
+                                                    c.modelo_carro AS ModeloCarroAlugado,
                                                     c.numero_assentos_carro AS NumeroDeAssentosCarroAlugado,
                                                     c.preco_diaria_carro AS PrecoDaDiariaCarroAlugado,
                                                     c.id_usuario AS CodigoUsuarioLocador

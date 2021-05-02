@@ -10,6 +10,7 @@ namespace Vrum.BFF.Entidades
         public int Codigo { get; set; }        
         public string ChaveIdentificacao { get; set; }
         public string Cep { get; set; }
+        public string Localidade { get; set; }
         public string Logradouro { get; set; }
         public string Numero { get; set; }
         public string Complemento { get; set; }

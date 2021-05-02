@@ -33,6 +33,8 @@ namespace Vrum.BFF.Controllers.Models.Usuario
             {
                 if (string.IsNullOrWhiteSpace(EnderecoUsuario.Cep))
                     erros.Add("O campo CEP do endereço do usuário deve ser preenchido");
+                if (string.IsNullOrWhiteSpace(EnderecoUsuario.Localidade))
+                    erros.Add("O campo localidade do endereço do usuário deve ser preenchido");
                 if (string.IsNullOrWhiteSpace(EnderecoUsuario.Logradouro))
                     erros.Add("O campo logradouro do endereço do usuário deve ser preenchido");
                 if (string.IsNullOrWhiteSpace(EnderecoUsuario.Numero))
@@ -58,7 +60,8 @@ namespace Vrum.BFF.Controllers.Models.Usuario
                     Complemento = EnderecoUsuario.Complemento,
                     Logradouro = EnderecoUsuario.Logradouro,
                     Numero = EnderecoUsuario.Numero,
-                    Uf = EnderecoUsuario.Uf
+                    Uf = EnderecoUsuario.Uf,
+                    Localidade = EnderecoUsuario.Localidade
                 };
             }
 
@@ -69,6 +72,7 @@ namespace Vrum.BFF.Controllers.Models.Usuario
     public class CadastrarEnderecoRequestModel
     {
         public string Cep { get; set; }
+        public string Localidade { get; set; }
         public string Logradouro { get; set; }
         public string Numero { get; set; }
         public string Complemento { get; set; }
