@@ -18,12 +18,14 @@ namespace Vrum.BFF.Servicos.Aluguel
         private readonly IAluguelRepositorio _aluguelRepositorio;
         private readonly IUsuarioServico _usuarioServico;
         private readonly ICarroServico _carroServico;
+        private readonly IMessageBus _messageBus;
 
-        public AluguelServico(IAluguelRepositorio aluguelRepositorio, IUsuarioServico usuarioServico, ICarroServico carroServico)
+        public AluguelServico(IAluguelRepositorio aluguelRepositorio, IUsuarioServico usuarioServico, ICarroServico carroServico, IMessageBus messageBus)
         {
             _aluguelRepositorio = aluguelRepositorio;
             _usuarioServico = usuarioServico;
             _carroServico = carroServico;
+            _messageBus = messageBus;
         }
 
         public async Task<AtualizarAluguelServicoResponseModel> AtualizarAluguel(int codigoAluguel, AlterarAluguelRequestModel requisicao)
@@ -124,7 +126,15 @@ namespace Vrum.BFF.Servicos.Aluguel
                 CodigoCarroAlugado = carroQueSeraAlugado.Carro.Codigo
             };
 
-            await _aluguelRepositorio.CadastrarAluguel(aluguelDto);
+            Parallel.Invoke(
+                async () => {
+                    await _aluguelRepositorio.CadastrarAluguel(aluguelDto);
+                },
+                () => {
+                    _messageBus.PostMessageTopic(usuarioLocatario.Usuario.Cpf); // ???
+                }
+            );
+
             var codigoAluguelCadastrado = await _aluguelRepositorio.ObterAluguel(chaveIdentificacaoreserva);
             return new CadastrarAluguelServicoResponseModel(codigoAluguelCadastrado.Codigo);
         }
