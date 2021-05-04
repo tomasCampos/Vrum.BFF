@@ -1,4 +1,5 @@
-﻿using Repositorio.Dtos;
+﻿using Newtonsoft.Json;
+using Repositorio.Dtos;
 using Repositorio.Repositorios;
 using System;
 using System.Collections.Generic;
@@ -18,12 +19,14 @@ namespace Vrum.BFF.Servicos.Aluguel
         private readonly IAluguelRepositorio _aluguelRepositorio;
         private readonly IUsuarioServico _usuarioServico;
         private readonly ICarroServico _carroServico;
+        private readonly IMessageBus _messageBus;
 
-        public AluguelServico(IAluguelRepositorio aluguelRepositorio, IUsuarioServico usuarioServico, ICarroServico carroServico)
+        public AluguelServico(IAluguelRepositorio aluguelRepositorio, IUsuarioServico usuarioServico, ICarroServico carroServico, IMessageBus messageBus)
         {
             _aluguelRepositorio = aluguelRepositorio;
             _usuarioServico = usuarioServico;
             _carroServico = carroServico;
+            _messageBus = messageBus;
         }
 
         public async Task<AtualizarAluguelServicoResponseModel> AtualizarAluguel(int codigoAluguel, AlterarAluguelRequestModel requisicao)
@@ -125,8 +128,38 @@ namespace Vrum.BFF.Servicos.Aluguel
             };
 
             await _aluguelRepositorio.CadastrarAluguel(aluguelDto);
-            var codigoAluguelCadastrado = await _aluguelRepositorio.ObterAluguel(chaveIdentificacaoreserva);
-            return new CadastrarAluguelServicoResponseModel(codigoAluguelCadastrado.Codigo);
+            var aluguelCadastrado = await ObterAluguel(chaveIdentificacaoreserva);
+
+            var carroResponse = new
+            {
+                marca = aluguelCadastrado.CarroAlugado.Marca,
+                modelo = aluguelCadastrado.CarroAlugado.Modelo
+            };
+
+            var locatario = new
+            {
+                nome = aluguelCadastrado.UsuarioLocatario.Nome,
+                email = aluguelCadastrado.UsuarioLocatario.Email,
+                numeroTelefone = aluguelCadastrado.UsuarioLocatario.NumeroTelefone
+            };
+
+            var aluguelResponse = new
+            {
+                chaveIdentificacaoreserva = aluguelCadastrado.ChaveIdentificacaoReserva,
+                codigoUsuarioLocador = aluguelCadastrado.CodigoUsuarioLocador,
+                codigo = aluguelCadastrado.Codigo,
+                dataInicioReserva = aluguelCadastrado.DataInicioReserva,
+                dataFimReserva = aluguelCadastrado.DataFimReserva,
+                dataDevolucao = aluguelCadastrado.DataDevolucaoCarro,
+                situacao = aluguelCadastrado.Situacao,
+                precoTotal = aluguelCadastrado.PrecoTotal,
+                usuarioLocatario = locatario,
+                carroAlugado = carroResponse
+            };
+            
+            _messageBus.PostMessageTopic(JsonConvert.SerializeObject(aluguelResponse), aluguelCadastrado.CodigoUsuarioLocador);
+            
+            return new CadastrarAluguelServicoResponseModel(aluguelCadastrado.Codigo);
         }
 
         public async Task<List<AluguelEntidade>> ListarAlugueis(int? codigoUsuarioLocador = null, int? codigoUsuarioLocatario = null, string situacao = null)

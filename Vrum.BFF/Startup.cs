@@ -37,6 +37,7 @@ namespace Vrum.BFF
             services.AddScoped<ICarroServico, CarroServico>();
             services.AddScoped<IAluguelRepositorio, AluguelRepositorio>();
             services.AddScoped<IAluguelServico, AluguelServico>();
+            services.AddScoped<IMessageBus, MessageBus>();
 
             services.AddCors(options =>
             {
