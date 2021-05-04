@@ -1,57 +1,42 @@
 ﻿using RabbitMQ.Client;
+using Repositorio.Dtos;
 using System;
+using Newtonsoft.Json;
 using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace Vrum.BFF
 {
     public class MessageBus : IMessageBus
     {
+        const string EXCHANGE = "pending-rents";
         private ConnectionFactory _factory;
         public MessageBus()
         {
             _factory = new ConnectionFactory()
             {
-                HostName = "localhost" //conferir ip com joao
+                Uri = new Uri("amqps://oshgkrzg:UGeGl_ODOBs97UbTqKd00_CfN0oQRUsw@clam.rmq.cloudamqp.com/oshgkrzg")
             };
         }
 
-        public void PostMessageTopic(string message)
+        public void PostMessageTopic(string message, int userId)
         {
-            string route = GetRoute(message);
-            string exchange = GetExchange();
+            string route = GetRoute(userId);
             IConnection connection = _factory.CreateConnection();
             IModel channel = connection.CreateModel();
-            channel.ExchangeDeclare(exchange, "topic");
-            
+            channel.ExchangeDeclare(EXCHANGE, "topic");
+
             byte[] body = Encoding.UTF8.GetBytes(message);
-            channel.BasicPublish(exchange: exchange, routingKey: route, basicProperties: null, body: body);
-            
-            Console.WriteLine($"Mensagem enviada: {message}");
+            channel.BasicPublish(exchange: EXCHANGE, routingKey: route, basicProperties: null, body: body);
         }
 
-        private string GetRoute(string message) => $"user-rents-{message}-key";
-        private string GetExchange() => $"user-rents-queue"; // vai variar isso?
+        private string GetRoute(int userId) => $"user.rents.{userId}.key";
     }
+
 
     public interface IMessageBus
     {
-        void PostMessageTopic(string message);
+        void PostMessageTopic(string aluguel, int userId);
     }
 }
-
-/*
-
-public void PostMessageQueue(string queueRoute, string message)
-
-{
-    IConnection connection = _factory.CreateConnection();
-    IModel channel = connection.CreateModel();
-    channel.QueueDeclare(queue: queueRoute, true, false, false, null);
-            
-    byte[] body = Encoding.UTF8.GetBytes(message);
-    channel.BasicPublish(exchange: "", routingKey: queueRoute, basicProperties: null, body: body);
-            
-    Console.WriteLine($"Mensagem enviada: {message}");
-}
-
-*/
