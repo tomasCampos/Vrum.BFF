@@ -234,6 +234,7 @@
                                                     a.data_fim_reserva_aluguel AS DataFimReserva,
                                                     a.data_devolucao_carro_aluguel AS DataDevolucaoCarro,
                                                     a.situacao_aluguel AS Situacao,
+                                                    a.data_criacao AS DataDoCadastro,
                                                     a.preco_total_aluguel AS PrecoTotal,
                                                     u.id_usuario AS CodigoUsuarioLocatario,
                                                     u.nome_usuario AS NomeUsuarioLocatario,

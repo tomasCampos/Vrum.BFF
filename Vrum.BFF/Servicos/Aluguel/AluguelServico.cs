@@ -90,11 +90,22 @@ namespace Vrum.BFF.Servicos.Aluguel
             var novoCarro = await _carroServico.ObterCarro(novoCodigoCarroAlugado);
             if (!novoCarro.Sucesso)
                 return new AtualizarAluguelServicoResponseModel("Carro não encontrado.", AtualizarAluguelServicoResponseModel.FalhasPossiveis.CARRO_NAO_EXISTE);
+            if(!novoCarro.Carro.Disponibilidade)
+                return new AtualizarAluguelServicoResponseModel("Carro não está disponível para aluguel.", AtualizarAluguelServicoResponseModel.FalhasPossiveis.CARRO_NAO_EXISTE);
 
             var novoPrecoAluguel = novoCarro.Carro.PrecoDaDiaria * 
                 (novaDataDevolucao.HasValue ? novaDataDevolucao.Value - novaDataInicioReserva : novaDataFimReserva - novaDataInicioReserva).TotalDays;
 
+            novoPrecoAluguel = novoPrecoAluguel < aluguel.PrecoTotal ? aluguel.PrecoTotal : novoPrecoAluguel;
+
             await _aluguelRepositorio.AtualizarAluguel(codigoAluguel, novaDataInicioReserva, novaDataFimReserva, novaDataDevolucao, novoCodigoSituacao, novoPrecoAluguel, novoCodigoCarroAlugado);
+
+            if (novoCodigoSituacao == 1)
+               await _carroServico.Atualizarcarro(novoCarro.Carro.Codigo, new Controllers.Models.Carro.AlterarCarroRequestModel { Disponibilidade = false });
+
+            if (novoCodigoSituacao == 3)
+                await _carroServico.Atualizarcarro(novoCarro.Carro.Codigo, new Controllers.Models.Carro.AlterarCarroRequestModel { Disponibilidade = true });
+
             return new AtualizarAluguelServicoResponseModel();
         }
 
@@ -179,7 +190,7 @@ namespace Vrum.BFF.Servicos.Aluguel
                 alugueis.Add(new AluguelEntidade(dto));
             }
 
-            return alugueis;
+            return alugueis.OrderByDescending(a => a.DataDaSolicitacao).ToList();
         }
 
         public async Task<AluguelEntidade> ObterAluguel(string chaveIdentificacaoReserva)

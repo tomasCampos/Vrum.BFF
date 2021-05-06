@@ -9,6 +9,7 @@ namespace Repositorio.Dtos
         public DateTime DataInicioReserva { get; set; }
         public DateTime DataFimReserva { get; set; }
         public DateTime? DataDevolucaoCarro { get; set; }
+        public DateTime DataDoCadastro { get; set; }
         public int Situacao { get; set; }
         public double PrecoTotal { get; set; }
         public int CodigoUsuarioLocatario { get; set; }
