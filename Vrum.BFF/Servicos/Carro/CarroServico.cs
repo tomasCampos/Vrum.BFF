@@ -105,7 +105,7 @@ namespace Vrum.BFF.Servicos.Carro
                 resposta.Add(new CarroEntidade(dto));
             }
 
-            return resposta;
+            return resposta.OrderBy(c => c.Modelo).ToList();
         }
 
         public async Task<List<CarroEntidade>> ListarCarros(string termo, int? codigoUsuarioDonoDoCarro, bool? disponibilidade)
@@ -118,7 +118,7 @@ namespace Vrum.BFF.Servicos.Carro
                 resposta.Add(new CarroEntidade(dto));
             }
 
-            return resposta;
+            return resposta.OrderBy(c => c.Modelo).ToList();
         }
 
         public async Task<ObterCarroServicoRespostaModel> ObterCarro(int codigo)
