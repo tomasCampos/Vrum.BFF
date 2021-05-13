@@ -21,7 +21,6 @@ namespace Vrum.BFF.Entidades
             DataFimReserva = aluguelDto.DataFimReserva;
             DataDevolucaoCarro = aluguelDto.DataDevolucaoCarro;
             CodigoSituacao = aluguelDto.Situacao;
-            CodigoUsuarioLocador = aluguelDto.CodigoUsuarioLocador;
             PrecoTotal = aluguelDto.PrecoTotal;
             DataDaSolicitacao = aluguelDto.DataDoCadastro;
 
@@ -32,6 +31,15 @@ namespace Vrum.BFF.Entidades
                 Email = aluguelDto.EmailUsuarioLocatario,
                 Nome = aluguelDto.NomeUsuarioLocatario,
                 NumeroTelefone = aluguelDto.NumeroTelefoneUsuarioLocatario
+            };
+
+            UsuarioLocador = new Locador
+            {
+                Codigo = aluguelDto.CodigoUsuarioLocador,
+                Cpf = aluguelDto.CpfUsuarioLocador,
+                Email = aluguelDto.EmailUsuarioLocador,
+                Nome = aluguelDto.NomeUsuarioLocador,
+                NumeroTelefone = aluguelDto.NumeroTelefoneUsuarioLocador
             };
 
             CarroAlugado = new CarroAluguel 
@@ -65,7 +73,7 @@ namespace Vrum.BFF.Entidades
         public double PrecoTotal { get; set; }
         public Locatario UsuarioLocatario { get; set; }
         public CarroAluguel CarroAlugado { get; set; }
-        public int CodigoUsuarioLocador { get; set; }
+        public Locador UsuarioLocador { get; set; }
 
         public enum SituacaoAluguel
         {
@@ -92,6 +100,10 @@ namespace Vrum.BFF.Entidades
         public class Locador
         {
             public int Codigo { get; set; }
+            public string Nome { get; set; }
+            public string Email { get; set; }
+            public string Cpf { get; set; }
+            public string NumeroTelefone { get; set; }
         }
 
         public class CarroAluguel

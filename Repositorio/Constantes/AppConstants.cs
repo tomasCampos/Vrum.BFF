@@ -247,10 +247,15 @@
                                                     c.modelo_carro AS ModeloCarroAlugado,
                                                     c.numero_assentos_carro AS NumeroDeAssentosCarroAlugado,
                                                     c.preco_diaria_carro AS PrecoDaDiariaCarroAlugado,
-                                                    c.id_usuario AS CodigoUsuarioLocador
+                                                    c.id_usuario AS CodigoUsuarioLocador,
+                                                    u2.nome_usuario AS NomeUsuarioLocador,
+                                                    u2.cpf_usuario AS CpfUsuarioLocador,
+                                                    u2.email_usuario AS EmailUsuarioLocador,
+                                                    u2.telefone_usuario AS NumeroTelefoneUsuarioLocador
                                                 FROM aluguel a
                                                 INNER JOIN usuario u ON a.id_usuario = u.id_usuario
                                                 INNER JOIN carro c ON a.id_carro = c.id_carro
+                                                INNER JOIN usuario u2 ON c.id_usuario = u2.id_usuario
                                                 WHERE 1 = 1
                                                 {0}";
 

@@ -24,5 +24,9 @@ namespace Repositorio.Dtos
         public int NumeroDeAssentosCarroAlugado { get; set; }
         public double PrecoDaDiariaCarroAlugado { get; set; }
         public int CodigoUsuarioLocador { get; set; }
+        public string NomeUsuarioLocador { get; set; }
+        public string CpfUsuarioLocador { get; set; }
+        public string EmailUsuarioLocador { get; set; }
+        public string NumeroTelefoneUsuarioLocador { get; set; }
     }
 }

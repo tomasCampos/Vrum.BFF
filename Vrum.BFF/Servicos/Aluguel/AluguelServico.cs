@@ -90,7 +90,7 @@ namespace Vrum.BFF.Servicos.Aluguel
             var novoCarro = await _carroServico.ObterCarro(novoCodigoCarroAlugado);
             if (!novoCarro.Sucesso)
                 return new AtualizarAluguelServicoResponseModel("Carro não encontrado.", AtualizarAluguelServicoResponseModel.FalhasPossiveis.CARRO_NAO_EXISTE);
-            if(novoCarro.Carro.Codigo != aluguel.CodigoCarroAlugado && !novoCarro.Carro.Disponibilidade)
+            if(!novoCarro.Carro.Disponibilidade)
                 return new AtualizarAluguelServicoResponseModel("Carro não está disponível para aluguel.", AtualizarAluguelServicoResponseModel.FalhasPossiveis.CARRO_NAO_EXISTE);
 
             var novoPrecoAluguel = novoCarro.Carro.PrecoDaDiaria * 
@@ -157,7 +157,7 @@ namespace Vrum.BFF.Servicos.Aluguel
             var aluguelResponse = new
             {
                 chaveIdentificacaoreserva = aluguelCadastrado.ChaveIdentificacaoReserva,
-                codigoUsuarioLocador = aluguelCadastrado.CodigoUsuarioLocador,
+                codigoUsuarioLocador = aluguelCadastrado.UsuarioLocador.Codigo,
                 codigo = aluguelCadastrado.Codigo,
                 dataInicioReserva = aluguelCadastrado.DataInicioReserva,
                 dataFimReserva = aluguelCadastrado.DataFimReserva,
@@ -168,7 +168,7 @@ namespace Vrum.BFF.Servicos.Aluguel
                 carroAlugado = carroResponse
             };
             
-            _messageBus.PostMessageTopic(JsonConvert.SerializeObject(aluguelResponse), aluguelCadastrado.CodigoUsuarioLocador);
+            _messageBus.PostMessageTopic(JsonConvert.SerializeObject(aluguelResponse), aluguelCadastrado.UsuarioLocador.Codigo);
             
             return new CadastrarAluguelServicoResponseModel(aluguelCadastrado.Codigo);
         }
