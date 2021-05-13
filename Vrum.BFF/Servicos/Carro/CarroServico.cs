@@ -26,6 +26,8 @@ namespace Vrum.BFF.Servicos.Carro
             var respostaObterCarro = await ObterCarro(codigoCarro);
             if (!respostaObterCarro.Sucesso)
                 return new AtualizarCarroServicoRespostaModel("Carro especificado não encontrado");
+            if(respostaObterCarro.Carro.AtualmenteAlugado)
+                return new AtualizarCarroServicoRespostaModel("Não é permitido editar um carro que está com aluguel em andamento");
 
             var carro = respostaObterCarro.Carro;
             var carroDto = new CarroDto()

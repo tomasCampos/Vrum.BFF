@@ -23,5 +23,6 @@ namespace Repositorio.Dtos
         public string Localizacao { get; set; }
         public string EstadoLocalizacao { get; set; }
         public int CodigoDoUsuarioDoDono { get; set; }
+        public int? CodigoAluguelEmAndamento { get; set; }
     }
 }

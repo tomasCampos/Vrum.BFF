@@ -160,7 +160,8 @@
                                                     u.email_usuario AS EmailDoDono,
                                                     u.telefone_usuario AS TelefoneDoDono,
                                                     e.logradouro_endereco AS Localizacao,
-                                                    e.uf_endereco AS EstadoLocalizacao
+                                                    e.uf_endereco AS EstadoLocalizacao,
+                                                    (SELECT a.id_aluguel FROM aluguel a WHERE a.id_carro = c.id_carro AND a.situacao_aluguel = 1) AS CodigoAluguelEmAndamento
                                                 FROM carro c
                                                 INNER JOIN usuario u ON c.id_usuario = u.id_usuario
                                                 INNER JOIN endereco e ON u.id_endereco = e.id_endereco
