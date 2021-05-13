@@ -98,10 +98,13 @@ namespace Vrum.BFF.Servicos.Aluguel
 
             novoPrecoAluguel = novoPrecoAluguel < aluguel.PrecoTotal ? aluguel.PrecoTotal : novoPrecoAluguel;
 
-            await _aluguelRepositorio.AtualizarAluguel(codigoAluguel, novaDataInicioReserva, novaDataFimReserva, novaDataDevolucao, novoCodigoSituacao, novoPrecoAluguel, novoCodigoCarroAlugado);
+            if(novoCodigoSituacao == 1 && novoCarro.Carro.AtualmenteAlugado)
+                return new AtualizarAluguelServicoResponseModel("O carro em questão já se encontra com alguel em andamento", AtualizarAluguelServicoResponseModel.FalhasPossiveis.CARRO_NAO_EXISTE);
 
             if (novoCodigoSituacao == 1)
-               await _carroServico.Atualizarcarro(novoCarro.Carro.Codigo, new Controllers.Models.Carro.AlterarCarroRequestModel { Disponibilidade = false });
+               await _carroServico.Atualizarcarro(novoCarro.Carro.Codigo, new Controllers.Models.Carro.AlterarCarroRequestModel { Disponibilidade = false });            
+
+            await _aluguelRepositorio.AtualizarAluguel(codigoAluguel, novaDataInicioReserva, novaDataFimReserva, novaDataDevolucao, novoCodigoSituacao, novoPrecoAluguel, novoCodigoCarroAlugado);
 
             if (novoCodigoSituacao == 3)
                 await _carroServico.Atualizarcarro(novoCarro.Carro.Codigo, new Controllers.Models.Carro.AlterarCarroRequestModel { Disponibilidade = true });
