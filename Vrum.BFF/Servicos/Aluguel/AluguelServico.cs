@@ -90,7 +90,7 @@ namespace Vrum.BFF.Servicos.Aluguel
             var novoCarro = await _carroServico.ObterCarro(novoCodigoCarroAlugado);
             if (!novoCarro.Sucesso)
                 return new AtualizarAluguelServicoResponseModel("Carro não encontrado.", AtualizarAluguelServicoResponseModel.FalhasPossiveis.CARRO_NAO_EXISTE);
-            if(!novoCarro.Carro.Disponibilidade)
+            if(novoCarro.Carro.Codigo != aluguel.CodigoCarroAlugado && !novoCarro.Carro.Disponibilidade)
                 return new AtualizarAluguelServicoResponseModel("Carro não está disponível para aluguel.", AtualizarAluguelServicoResponseModel.FalhasPossiveis.CARRO_NAO_EXISTE);
 
             var novoPrecoAluguel = novoCarro.Carro.PrecoDaDiaria * 

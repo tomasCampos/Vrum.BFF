@@ -17,13 +17,13 @@ namespace Vrum.BFF.Controllers.Models.Aluguel
         {
             var erros = new List<string>();
 
-            if (DataFimReserva != null && DataInicioReserva != null && DataFimReserva <= DataInicioReserva)
+            if (DataFimReserva.HasValue && DataInicioReserva.HasValue && DataFimReserva.Value <= DataInicioReserva.Value)
                 erros.Add("A data final da reserva deve ser superior à data inicial da reserva.");
-            if (DataInicioReserva != null && DataInicioReserva < DateTime.Now.Date)
+            if (DataInicioReserva.HasValue && DataInicioReserva.Value.Date < DateTime.Now.Date)
                 erros.Add("A data inicial da reserva não pode ser anterior à data atual.");
-            if (DataFimReserva != null && DataFimReserva < DateTime.Now.Date)
+            if (DataFimReserva.HasValue && DataFimReserva.Value.Date < DateTime.Now.Date)
                 erros.Add("A data final da reserva não pode ser anterior à data atual.");
-            if (DataDeDevolucaoDoCarro != null && DataDeDevolucaoDoCarro > DateTime.Now.Date)
+            if (DataDeDevolucaoDoCarro.HasValue && DataDeDevolucaoDoCarro.Value.Date > DateTime.Now.Date)
                 erros.Add("A data que o carro foi devolvido não pode estar no futuro.");
             if (CodigoCarroQueSeraAlugado.HasValue && CodigoCarroQueSeraAlugado <= 0)
                 erros.Add("O código do carro informado está inválido.");
