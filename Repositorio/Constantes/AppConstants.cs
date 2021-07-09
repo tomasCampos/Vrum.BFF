@@ -4,7 +4,7 @@
     {
         #region INFRAESTRUTURA
 
-        public const string CONNECTION_STRING = "server=us-cdbr-east-03.cleardb.com;user=bf9c7fe9712622;password=e459392c;database=heroku_3dc1bcc8f5cdd12;SSL Mode=None";
+        public const string CONNECTION_STRING = "CONTACT-ME-IF-YOU-WANT-TO-TEST-THE-API";
 
         public const string CHAVE_CIFRA = "1e64fdce-e561-4f3d-bb78-0d7c8c86d14b";
 
