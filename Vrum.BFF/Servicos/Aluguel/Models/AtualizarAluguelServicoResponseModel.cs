@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Vrum.BFF.Servicos.Aluguel.Models
+﻿namespace Vrum.BFF.Servicos.Aluguel.Models
 {
     public class AtualizarAluguelServicoResponseModel : RespostaServicoBase
     {

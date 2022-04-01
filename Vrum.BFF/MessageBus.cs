@@ -1,10 +1,6 @@
 ﻿using RabbitMQ.Client;
-using Repositorio.Dtos;
 using System;
-using Newtonsoft.Json;
 using System.Text;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
 
 namespace Vrum.BFF
 {

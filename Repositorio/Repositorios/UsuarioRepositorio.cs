@@ -1,8 +1,8 @@
 ﻿using Repositorio.Constantes;
 using Repositorio.Dtos;
 using Repositorio.Infraestrutura;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Repositorio.Repositorios
 {

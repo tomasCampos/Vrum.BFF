@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Repositorio.Dtos
+﻿namespace Repositorio.Dtos
 {
     public class UsuarioDto
     {     

@@ -1,10 +1,8 @@
 ﻿using Dapper;
 using MySqlConnector;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Repositorio.Constantes;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Repositorio.Infraestrutura
 {

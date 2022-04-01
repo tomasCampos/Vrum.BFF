@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Repositorio.Dtos
+﻿namespace Repositorio.Dtos
 {
     public class CarroDto
     {        

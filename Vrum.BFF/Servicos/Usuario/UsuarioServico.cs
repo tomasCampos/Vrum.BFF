@@ -1,12 +1,12 @@
-﻿using Repositorio.Repositorios;
+﻿using Repositorio.Dtos;
+using Repositorio.Repositorios;
+using System;
 using System.Threading.Tasks;
-using Vrum.BFF.Servicos.Usuario.Models;
+using Vrum.BFF.Controllers.Models.Usuario;
 using Vrum.BFF.Entidades;
-using Repositorio.Dtos;
+using Vrum.BFF.Servicos.Usuario.Models;
 using Vrum.BFF.Util;
 using static Repositorio.Constantes.AppConstants;
-using System;
-using Vrum.BFF.Controllers.Models.Usuario;
 
 namespace Vrum.BFF.Servicos.Usuario
 {
